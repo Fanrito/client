@@ -22,3 +22,16 @@ npm install
 npm run dev
 ```
 
+### 登录页
+
+#### URI
+
+```js
+// 登录
+/login
+// 注册
+/login/register
+```
+
+
+

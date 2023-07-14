@@ -1,29 +1,24 @@
-# client
+# 厦小鱼校园二手交易平台
 
-This template should help get you started developing with Vue 3 in Vite.
+## 前端
 
-## Recommended IDE Setup
+### 基本信息
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+框架：Vue3
 
-## Customize configuration
+组件库：NavieUI（强推！小众、美观而且好用）
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+node.js v16.19.0
 
-## Project Setup
+npm v8.19.3
 
-```sh
+包管理工具：npm
+
+### 快速启动
+
+```js
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```

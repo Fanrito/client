@@ -7,12 +7,21 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      component: () => import('../views/Index.vue')
+      component: () => import('../views/Index/Index.vue')
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/Login.vue')
+      component: () => import('../views/Login/Login.vue'),
+      children: [
+        { path: '/login/register', component: () => import('../views/Login/RegisterCard.vue') },
+        { path: '/login', component: () => import('../views/Login/LoginCard.vue') }
+      ]
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: () => import('../views/User.vue')
     }
   ]
 })

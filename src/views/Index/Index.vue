@@ -1,7 +1,5 @@
 <!-- 交易平台主页 -->
-<template>
-  <h1>index</h1>
-</template>
+<template>Index</template>
 
 <script setup></script>
 

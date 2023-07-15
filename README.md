@@ -14,6 +14,8 @@ npm v8.19.3
 
 包管理工具：npm
 
+
+
 ### 快速启动
 
 ```js
@@ -21,6 +23,42 @@ npm install
 
 npm run dev
 ```
+
+
+
+### 项目结构
+
+
+```
+client
+├─ .git
+├─ .gitignore
+├─ index.html	
+├─ package-lock.json
+├─ package.json	// 包管理器
+├─ README.md	// 文档
+├─ src
+│  ├─ App.vue
+│  ├─ assets	// 全局基础设置
+│  │  ├─ base.css
+│  │  ├─ favicon.ico
+│  │  └─ main.css
+│  ├─ main.js
+│  ├─ router
+│  │  └─ index.js	// 路由
+│  ├─ static	// 静态资源
+│  ├─ stores	// 状态存储
+│  └─ views	// 路由控制的页面
+└─ vite.config.js	// 打包工具配置文件
+
+```
+
+
+
+### 注意事项
+
+1. 组件库是全局引用的，不需要再次手动导入，直接使用即可
+2. node.js必须是16及以上的版本，否则无法启动项目
 
 ---
 
@@ -50,4 +88,3 @@ npm run dev
 ### 用户管理页面
 
 ### 商品管理页面
-

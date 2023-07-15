@@ -1,6 +1,25 @@
 <!-- 交易平台主页 -->
-<template>Index</template>
+<template>
+  <div class="w">
+    <TopNav class="w" style="margin-top: 50px"></TopNav>
+    <Carousel style="margin: 20px auto"></Carousel>
+    <GoodsContentVue></GoodsContentVue>
+    <Footer></Footer>
+  </div>
+  <SideNav></SideNav>
+</template>
 
-<script setup></script>
+<script setup>
+import TopNav from './TopNav.vue'
+import Carousel from './Carousel.vue'
+import GoodsContentVue from './GoodsContent.vue'
+import Footer from '../../components/Footer.vue'
+import SideNav from './SideNav.vue'
+</script>
 
-<style scoped></style>
+<style scoped>
+.w {
+  width: 990px;
+  margin: 0 auto;
+}
+</style>

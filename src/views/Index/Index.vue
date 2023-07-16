@@ -6,7 +6,6 @@
     <GoodsContentVue></GoodsContentVue>
     <Footer></Footer>
   </div>
-  <SideNav></SideNav>
 </template>
 
 <script setup>

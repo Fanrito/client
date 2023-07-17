@@ -43,6 +43,9 @@ let rules = {
     { min: 5, max: 18, message: '账号长度在5到18个字符', trigger: 'blur' }
   ]
 }
+const login = () => {
+  router.push("/user")
+}
 
 // const login = async () => {
 //   let result = await axios.post('/admin/login', {

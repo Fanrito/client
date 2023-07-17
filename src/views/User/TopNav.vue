@@ -3,10 +3,10 @@
   <div class="top">
     <div class="brand">
       <img src="../../static/img/favicon-32x32.png" alt="" />
-      <span class="brand-text">厦小鱼二手交易网</span>
+      <span class="brand-text">厦小鱼 个人中心</span>
     </div>
     <div class="search-box">
-     <SearchBox searchTip="搜索你想要的商品" :search="search"></SearchBox>
+      <SearchBox searchTip="搜索你想要的商品" :search="search"></SearchBox>
     </div>
     <div class="topnav">
       <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
@@ -37,15 +37,15 @@ const menuOptions = [
           target: '_blank',
           rel: 'noopenner noreferrer'
         },
-        '个人中心'
+        '编辑个人信息'
       ),
-    key: 'login',
+    key: 'edit',
     icon: renderIcon(PersonIcon)
-  },
+  }
 ]
 
-const search = (key) => {
-  console.log(key);
+const search = key => {
+  console.log(key)
 }
 </script>
 

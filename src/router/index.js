@@ -21,7 +21,14 @@ const router = createRouter({
     {
       path: '/user',
       name: 'user',
-      component: () => import('../views/User.vue')
+      component: () => import('../views/User/User.vue'),
+      children: [
+        { path: '/user', component: () => import('../views/User/ShoppingCart.vue') },
+        { path: '/user/bought', component: () => import('../views/User/Bought.vue') },
+        { path: '/user/sold', component: () => import('../views/User/Sold.vue') },
+        { path: '/user/comments', component: () => import('../views/User/Comments.vue') },
+        { path: '/user/published', component: () => import('../views/User/Published.vue') }
+      ]
     }
   ]
 })

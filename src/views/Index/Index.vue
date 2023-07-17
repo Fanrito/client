@@ -13,7 +13,6 @@ import TopNav from './TopNav.vue'
 import Carousel from './Carousel.vue'
 import GoodsContentVue from './GoodsContent.vue'
 import Footer from '../../components/Footer.vue'
-import SideNav from './SideNav.vue'
 </script>
 
 <style scoped>

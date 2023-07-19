@@ -1,6 +1,6 @@
 <!-- 登录页 -->
 <template>
-  <div class="background-img">
+  <div class="">
     <n-card title="" hoverable class="loginBorad">
       <div>
         <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
@@ -8,6 +8,7 @@
       <RouterView></RouterView>
     </n-card>
   </div>
+  <Footer></Footer>
 </template>
 
 <script setup>
@@ -16,6 +17,7 @@ import { ref, reactive, inject, h } from 'vue'
 import { NIcon } from 'naive-ui'
 import { BookOutline as BookIcon, PersonOutline as PersonIcon } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
+import Footer from '../../components/Footer.vue'
 
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
@@ -56,12 +58,6 @@ const menuOptions = [
 </script>
 
 <style scoped>
-.background-img {
-  position: fixed;
-  width: 100%;
-  height: 1080px;
-  background-size: cover;
-}
 .loginBorad {
   margin: auto;
   margin-top: 50px;

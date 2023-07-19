@@ -25,6 +25,7 @@
     </div>
     <OtherInfo></OtherInfo>
   </div>
+  <Footer></Footer>
 </template>
 
 <script setup>
@@ -32,6 +33,7 @@ import { reactive, onMounted } from 'vue'
 import TopNav from './TopNav.vue'
 import OtherInfo from './OtherInfo.vue'
 import axios from 'axios'
+import Footer from '../../components/Footer.vue'
 
 const user = reactive({
   id: 1,
@@ -50,6 +52,8 @@ onMounted(() => {
 
 const loadUser = async () => {
   let res = await axios.get('/user')
+  console.log(res)
+  user.value = rows[0]
 }
 </script>
 

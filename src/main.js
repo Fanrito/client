@@ -4,6 +4,8 @@ import navie from 'naive-ui'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createDiscreteApi } from 'naive-ui'
+import { UserStore } from './stores/UserStore.js'
+
 import App from './App.vue'
 import router from './router'
 
@@ -20,5 +22,12 @@ app.provide('server_url', axios.defaults.baseURL)
 app.use(navie)
 app.use(createPinia())
 app.use(router)
+
+// 拦截器
+const userStore = new UserStore()
+axios.interceptors.request.use(config => {
+  config.headers.token = userStore.token
+  return config
+})
 
 app.mount('#app')

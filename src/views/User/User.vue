@@ -4,8 +4,11 @@
     <TopNav style="margin-top: 50px"></TopNav>
     <div class="user-banner">
       <div class="m-user">
-        <div class="avator">
+        <div class="avator" @mouseover=";(showOverlay = true), setOverlayOpacity(true)" @mouseleave=";(showOverlay = false), setOverlayOpacity(false)">
           <img :src="user.image" alt="" />
+          <n-upload action="http://127.0.0.1:8080/upload" :default-upload="false" @change="handleFinish">
+            <div class="overlay" v-if="showOverlay">上传头像</div>
+          </n-upload>
         </div>
         <div class="usernickname">
           <span>{{ user.name }}</span>
@@ -29,11 +32,34 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import TopNav from './TopNav.vue'
 import OtherInfo from './OtherInfo.vue'
 import axios from 'axios'
 import Footer from '../../components/Footer.vue'
+import { NIcon, useMessage } from 'naive-ui'
+
+const message = useMessage()
+const handleFinish = ({ file, event }) => {
+  console.log(file);
+  console.log(event)
+  message.success((event?.target).response)
+  const ext = file.name.split('.')[1]
+  file.name = `${user.id}_avator.${ext}`
+  // file.url = '__HTTPS__://www.mocky.io/v2/5e4bafc63100007100d8b70f'
+  let res = axios.post('/upload', {
+    userId: user.id,
+    image: file
+  })
+  if(res.data.code == 1) {
+    message.info("图片上传成功")
+    user.image = res.data.data
+    uploadAvator()
+  } else {
+    message.info("图片上传失败")
+  }
+  return file
+}
 
 const user = reactive({
   id: 1,
@@ -46,14 +72,44 @@ const user = reactive({
   image: '/src/static/img/头像.jpg',
   campus: '翔安'
 })
+
+const showOverlay = ref(false)
+const setOverlayOpacity = visible => {
+  const overlay = document.querySelector('.overlay')
+  if (overlay) {
+    overlay.style.opacity = visible ? '1' : '0'
+  }
+}
+
 onMounted(() => {
-  // loadUser()
+  loadUser()
 })
 
 const loadUser = async () => {
   let res = await axios.get('/user')
   console.log(res)
   user.value = rows[0]
+}
+
+const uploadAvator = async () => {
+  const param = {
+    id: user.id,
+    image: user.image
+  }
+  axios
+    .patch('/user/update', param)
+    .then(response => {
+      console.log('User information updated successfully:', response.data)
+      if (response.code == 1) {
+        message.info('提交成功')
+      } else if (response.code == 0) {
+        message.info('提交失败')
+      }
+    })
+    .catch(error => {
+      console.error('Error updating user information:', error)
+      message.error('网络异常')
+    })
 }
 </script>
 
@@ -78,6 +134,7 @@ const loadUser = async () => {
     border-radius: 15px;
 
     .avator {
+      position: relative;
       width: 72px;
       height: 72px;
       margin: 30px auto;
@@ -93,6 +150,25 @@ const loadUser = async () => {
         display: inline-block;
         border: 0;
         vertical-align: middle;
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 999;
       }
     }
 
@@ -110,6 +186,7 @@ const loadUser = async () => {
     flex-direction: column;
     width: 750px;
     margin: auto 20px;
+    margin-right: 0;
     padding: 0 20px;
     height: 225px;
     line-height: 55px;

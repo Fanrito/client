@@ -72,32 +72,22 @@ let rules = {
     }
   ]
 }
-const register = () => {
-  router.push('/user')
-}
 
 // 登录请求，需要根据后端修改
-// const register = async () => {
-//   let result = await axios.post('/user/login', {
-//     account: user.account,
-//     password: user.password
-//   })
-//   console.log(result);
-//   if (result.data.code == 1) {
-//     userStore.token = result.data.data.token
-//     userStore.account = result.data.data.account
-//     userStore.id = result.data.data.id
-//     if (user.rember) {
-//       localStorage.setItem('account', user.account)
-//       localStorage.setItem('password', user.password)
-//       localStorage.setItem('rember', user.rember ? 1 : 0)
-//     }
-//     message.info('登陆成功')
-//     router.push('/user')
-//   } else {
-//     message.error('登陆失败')
-//   }
-// }
+const register = async () => {
+  let result = await axios.post('/user/signup', {
+    account: user.account,
+    password: user.password
+  })
+  console.log(result);
+  if (result.data.code == 1) {
+    userStore.token = result.data.data.token
+    message.info('注册成功')
+    router.push('/user')
+  } else {
+    message.error('注册失败')
+  }
+}
 </script>
 
 <style lang="scss" scoped></style>

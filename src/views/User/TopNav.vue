@@ -33,13 +33,13 @@ const menuOptions = [
       h(
         'a',
         {
-          href: '/login',
+          href: '/changeinfo',
           target: '_blank',
           rel: 'noopenner noreferrer'
         },
         '编辑个人信息'
       ),
-    key: 'edit',
+    key: 'change',
     icon: renderIcon(PersonIcon)
   }
 ]

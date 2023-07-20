@@ -27,8 +27,13 @@ const router = createRouter({
         { path: '/user/bought', component: () => import('../views/User/Bought.vue') },
         { path: '/user/sold', component: () => import('../views/User/Sold.vue') },
         { path: '/user/comments', component: () => import('../views/User/Comments.vue') },
-        { path: '/user/published', component: () => import('../views/User/Published.vue') }
+        { path: '/user/published', component: () => import('../views/User/Published.vue') },
       ]
+    }, 
+    {
+      path: '/changeinfo',
+      name: 'changeinfo',
+      component: () => import('../views/User/ChangeInfo.vue'),
     }
   ]
 })

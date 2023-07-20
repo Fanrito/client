@@ -34,6 +34,11 @@ const router = createRouter({
       path: '/changeinfo',
       name: 'changeinfo',
       component: () => import('../views/User/ChangeInfo.vue'),
+    },
+    {
+      path: '/detail',
+      name: 'detail',
+      component: () => import('../views/Detail/Detail.vue'),
     }
   ]
 })

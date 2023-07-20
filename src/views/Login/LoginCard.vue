@@ -47,7 +47,7 @@ let rules = {
 // 登录请求，需要根据后端修改
 const login = async () => {
   let result = await axios.post('/user/login', {
-    account: user.account,
+    username: user.account,
     password: user.password
   })
   console.log(result);

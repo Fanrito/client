@@ -9,9 +9,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed,inject } from 'vue'
 import GoodCard from '../../components/GoodCard.vue'
 import SideNav from './SideNav.vue'
+
+const axios = inject('axios')
 
 // 商品信息数组，需要渲染到页面上
 const goodsList = ref([
@@ -32,12 +34,12 @@ onMounted(() => {
   window.addEventListener('scroll', updateScrollTop)
   updateGoodsContentOffset()
 
-  // loadGoods()
+  loadGoods()
 })
 
 // 从后端获取商品信息
 const loadGoods = async () => {
-  let res = await axios.get(`/goods/all`)
+  let res = await axios.get(`/api/goods/all`)
   console.log(res)
   let temp_rows = res.data.data.rows
   for (let row of temp_rows) {

@@ -47,7 +47,7 @@ const handleFinish = ({ file, event }) => {
   const ext = file.name.split('.')[1]
   file.name = `${user.id}_avator.${ext}`
   // file.url = '__HTTPS__://www.mocky.io/v2/5e4bafc63100007100d8b70f'
-  let res = axios.post('/upload', {
+  let res = axios.post('/api/upload', {
     userId: user.id,
     image: file
   })
@@ -86,7 +86,7 @@ onMounted(() => {
 })
 
 const loadUser = async () => {
-  let res = await axios.get('/user')
+  let res = await axios.get('/api/user')
   console.log(res)
   user.value = rows[0]
 }

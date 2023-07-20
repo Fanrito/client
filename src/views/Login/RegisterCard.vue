@@ -2,8 +2,8 @@
   <div class="login-panel">
     <n-card title="注册">
       <n-form :rules="rules" :model="user">
-        <n-form-item path="account" label="用户名">
-          <n-input v-model:value="user.account" placeholder="请输入账号"></n-input>
+        <n-form-item path="username" label="用户名">
+          <n-input v-model:value="user.username" placeholder="请输入账号"></n-input>
         </n-form-item>
         <n-form-item path="password" label="密码">
           <n-input v-model:value="user.password" placeholder="请输入密码" type="password"></n-input>
@@ -32,7 +32,7 @@ const message = inject('message')
 const userStore = UserStore()
 
 let user = reactive({
-  account: '',
+  username: '',
   password: '',
   reenteredPassword: '',
   rember: false
@@ -46,7 +46,7 @@ function validatePasswordSame(rule, value) {
 }
 
 let rules = {
-  account: [
+  username: [
     { required: true, message: '请输入账号', trigger: 'blur' },
     { min: 3, max: 12, message: '账号长度在3到12个字符', trigger: 'blur' }
   ],
@@ -75,11 +75,15 @@ let rules = {
 
 // 登录请求，需要根据后端修改
 const register = async () => {
-  let result = await axios.post('/user/signup', {
-    account: user.account,
+  console.log({
+    username: user.username,
     password: user.password
   })
-  console.log(result);
+  let result = await axios.post('/signup', {
+    username: user.username,
+    password: user.password
+  })
+  console.log(result)
   if (result.data.code == 1) {
     userStore.token = result.data.data.token
     message.info('注册成功')

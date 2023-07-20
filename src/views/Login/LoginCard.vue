@@ -43,6 +43,16 @@ let rules = {
     { min: 5, max: 18, message: '账号长度在5到18个字符', trigger: 'blur' }
   ]
 }
+// <<<<<<< HEAD
+// const login = () => {
+
+//   if(user.account==='admin')
+//   router.push("/admin/user")
+//   else
+//   router.push("/user")
+// }
+// =======
+// >>>>>>> upstream/main
 
 // 登录请求，需要根据后端修改
 const login = async () => {

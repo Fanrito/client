@@ -34,7 +34,7 @@ const menuOptions = [
         'a',
         {
           href: '/changeinfo',
-          target: '_blank',
+          target: '',
           rel: 'noopenner noreferrer'
         },
         '编辑个人信息'

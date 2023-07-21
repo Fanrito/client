@@ -5,8 +5,8 @@
     <div class="user-banner">
       <div class="m-user">
         <div class="avator" @mouseover=";(showOverlay = true), setOverlayOpacity(true)" @mouseleave=";(showOverlay = false), setOverlayOpacity(false)">
-          <img :src="user.image" alt="" />
-          <n-upload action="http://127.0.0.1:8080/upload" :default-upload="false" @change="handleFinish">
+          <img :src="user.userPhoto" alt="" />
+          <n-upload :default-upload="false" @change="handleFinish">
             <div class="overlay" v-if="showOverlay">上传头像</div>
           </n-upload>
         </div>
@@ -17,11 +17,11 @@
       <div class="mt">
         <div class="mh">我的信息</div>
         <div class="mb">
-          <span>用户名: {{ user.username }}</span>
-          <span>性别: {{ user.gender }}</span>
-          <span>电话: {{ user.phone }}</span>
-          <span>邮箱: {{ user.email }}</span>
-          <span>校区: {{ user.campus }}</span>
+          <span>用户名: {{ user.userName }}</span>
+          <span>性别: {{ user.userGender }}</span>
+          <span>电话: {{ user.userPhoneNum }}</span>
+          <span>邮箱: {{ user.userEmail }}</span>
+          <span>校区: {{ user.userCampus }}</span>
         </div>
         <div class="profile">个人简介: {{ user.profile }}</div>
       </div>
@@ -32,45 +32,47 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, toRefs, inject } from 'vue'
 import TopNav from './TopNav.vue'
 import OtherInfo from './OtherInfo.vue'
-import axios from 'axios'
 import Footer from '../../components/Footer.vue'
 import { NIcon, useMessage } from 'naive-ui'
 
+const axios = inject('axios')
 const message = useMessage()
 const handleFinish = ({ file, event }) => {
-  console.log(file);
+  console.log(file)
   console.log(event)
   message.success((event?.target).response)
   const ext = file.name.split('.')[1]
   file.name = `${user.id}_avator.${ext}`
   // file.url = '__HTTPS__://www.mocky.io/v2/5e4bafc63100007100d8b70f'
-  let res = axios.post('/api/upload', {
-    userId: user.id,
+  let res = axios.post('/upload/headImg', {
     image: file
   })
-  if(res.data.code == 1) {
-    message.info("图片上传成功")
-    user.image = res.data.data
+  console.log(res);
+  if (res.data.code == 1) {
+    message.success('图片上传成功')
+    user.userPhoto = res.data.data
     uploadAvator()
   } else {
-    message.info("图片上传失败")
+    message.info('图片上传失败')
   }
   return file
 }
 
 const user = reactive({
-  id: 1,
-  username: '111111',
-  name: '范·奇森',
-  gender: '男',
-  phone: '13811012138',
-  email: 'fzz@250.com',
-  profile: '我是一个小可爱我是一个小可爱我是一个小可爱我是一个小可爱我是一个小可爱我是一个小可爱我是一个小可爱我是一个小可爱',
-  image: '/src/static/img/头像.jpg',
-  campus: '翔安'
+  userCampus: null,
+  userEmail: null,
+  userGender: null,
+  userId: null,
+  userName: null,
+  userNickname: null,
+  userPasswd: null,
+  userPhoneNum: null,
+  userPhoto: null,
+  userProfile: null,
+  userStatus: null
 })
 
 const showOverlay = ref(false)
@@ -86,15 +88,15 @@ onMounted(() => {
 })
 
 const loadUser = async () => {
-  let res = await axios.get('/api/user')
+  let res = await axios.get('/user')
   console.log(res)
-  user.value = rows[0]
+  Object.assign(user, res.data.data)
 }
 
 const uploadAvator = async () => {
   const param = {
-    id: user.id,
-    image: user.image
+    userId: user.userId,
+    userPhoto: user.userPhoto
   }
   axios
     .patch('/user/update', param)

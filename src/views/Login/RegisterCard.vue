@@ -85,7 +85,6 @@ const register = async () => {
   })
   console.log(result)
   if (result.data.code == 1) {
-    userStore.token = result.data.data.token
     message.info('注册成功')
     router.push('/user')
   } else {

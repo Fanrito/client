@@ -40,7 +40,7 @@ onMounted(() => {
 
 // 从后端获取商品信息
 const loadGoods = async () => {
-  let res = await axios.get(`/api/goods/all`)
+  let res = await axios.get(`/goods/all`)
   console.log(res)
   let temp_rows = res.data.data.rows
   for (let row of temp_rows) {

@@ -11,13 +11,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  // server: {
-  //   proxy: {
-  //     '/api': {
-  //       target: 'https://1d3c-112-48-20-228.ngrok-free.app',
-  //       changeOrigin: true,
-  //       rewrite: path => path.replace('^/api', '')
-  //     }
-  //   }
-  // }
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8080',
+        changeOrigin: true,
+        rewrite: path => path.replace(/^\/api/, '')
+      }
+    }
+  }
 })

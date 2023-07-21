@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import User from '../views/admin/user.vue';
+import Order from '../views/admin/order.vue';
+import addUser from '../views/admin/addUser.vue'
 
 // 在这里添加页面的路由
 const router = createRouter({
@@ -29,7 +32,34 @@ const router = createRouter({
         { path: '/user/comments', component: () => import('../views/User/Comments.vue') },
         { path: '/user/published', component: () => import('../views/User/Published.vue') },
       ]
-    }, 
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/admin/admin.vue'),
+      children:[
+        {path:'/admin/user',component:User},
+        {path:'/admin/order',component:Order},
+        {path:'/admin/addUser',component:addUser}
+      ]
+    },
+    // {
+    //   path: '/admin/user',
+    //   name: 'admin_user',
+    //   component: User
+
+      
+    // },
+    // {
+    //   path: '/admin/order',
+    //   name:'admin_order',
+    //   component: Order
+    // },
+    // {
+    //   path: '/admin/addUser',
+    //   name: 'addUser',
+    //   component: addUser
+    // },
     {
       path: '/changeinfo',
       name: 'changeinfo',
@@ -39,6 +69,14 @@ const router = createRouter({
       path: '/detail',
       name: 'detail',
       component: () => import('../views/Detail/Detail.vue'),
+    },
+    {
+      path:'/seller_detail',
+      component:()=>import('../views/Detail/Seller_Detail.vue'),
+    },
+    {
+      path:'/editPhoto',
+      component:()=>import('../views/Detail/editPhoto.vue')
     }
   ]
 })

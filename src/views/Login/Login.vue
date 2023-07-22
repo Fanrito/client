@@ -62,6 +62,5 @@ const menuOptions = [
   margin: auto;
   margin-top: 50px;
   width: 600px;
-  height: 500px;
 }
 </style>

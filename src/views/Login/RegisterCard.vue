@@ -3,7 +3,13 @@
     <n-card title="注册">
       <n-form :rules="rules" :model="user">
         <n-form-item path="username" label="用户名">
-          <n-input v-model:value="user.username" placeholder="请输入账号"></n-input>
+          <n-input v-model:value="user.username" placeholder="给自己取个好记的用户名吧"></n-input>
+        </n-form-item>
+        <n-form-item path="phone" label="手机号">
+          <n-input v-model:value="user.phone" placeholder="请输入手机号"></n-input>
+        </n-form-item>
+        <n-form-item path="email" label="邮箱">
+          <n-input v-model:value="user.email" placeholder="请输入邮箱"></n-input>
         </n-form-item>
         <n-form-item path="password" label="密码">
           <n-input v-model:value="user.password" placeholder="请输入密码" type="password"></n-input>
@@ -34,8 +40,10 @@ const userStore = UserStore()
 let user = reactive({
   username: '',
   password: '',
+  phone: '',
+  email: '',
   reenteredPassword: '',
-  rember: false
+  rember: true
 })
 
 function validatePasswordStartWith(rule, value) {
@@ -54,6 +62,15 @@ let rules = {
     { required: true, message: '请输入密码', trigger: 'blur' },
     { min: 5, max: 18, message: '账号长度在5到18个字符', trigger: 'blur' }
   ],
+  phone: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    {
+      pattern: /^[1-9]\d{10}$/,
+      message: '手机号码格式不正确',
+      trigger: 'blur'
+    }
+  ],
+  email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
   reenteredPassword: [
     {
       required: true,
@@ -80,9 +97,11 @@ const register = async () => {
     password: user.password
   })
   let result = await axios.post('/signup', {
-    username: user.username,
-    password: user.password
-  })
+    "username": user.username,
+    "password": user.password,
+    "email": user.email,
+    "phone": user.phone
+})
   console.log(result)
   if (result.data.code == 1) {
     message.info('注册成功')

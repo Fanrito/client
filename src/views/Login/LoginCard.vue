@@ -48,8 +48,6 @@ import { ref, reactive, inject } from 'vue'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
-const route = useRoute()
-
 const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()

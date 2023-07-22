@@ -11,14 +11,14 @@
           </n-upload>
         </div>
         <div class="usernickname">
-          <span>{{ user.name }}</span>
+          <span>{{ user.userNickname }}</span>
         </div>
       </div>
       <div class="mt">
         <div class="mh">我的信息</div>
         <div class="mb">
           <span>用户名: {{ user.userName }}</span>
-          <span>性别: {{ user.userGender }}</span>
+          <span>性别: {{ user.userGender == 1 ? '男' : '女' }}</span>
           <span>电话: {{ user.userPhoneNum }}</span>
           <span>邮箱: {{ user.userEmail }}</span>
           <span>校区: {{ user.userCampus }}</span>
@@ -37,6 +37,8 @@ import TopNav from './TopNav.vue'
 import OtherInfo from './OtherInfo.vue'
 import Footer from '../../components/Footer.vue'
 import { NIcon, useMessage } from 'naive-ui'
+import { UserStore } from '../../stores/UserStore.js'
+const userStore = UserStore()
 
 const axios = inject('axios')
 const message = useMessage()
@@ -49,7 +51,7 @@ const handleFinish = ({ file, event }) => {
     headers: { 'Content-Type': 'multipart/form-data' }
   }
   let res = axios.post(
-    '/upload/headImg',
+    '/upload',
     {
       image: file
     },
@@ -95,6 +97,8 @@ onMounted(() => {
 const loadUser = async () => {
   let res = await axios.get('/user')
   console.log(res)
+  // 缓存userId用来区分自己是否是某个商品的卖家
+  userStore.id = res.data.data.userId
   Object.assign(user, res.data.data)
 }
 

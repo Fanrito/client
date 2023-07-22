@@ -4,15 +4,16 @@
     <!-- <n-space vertical hoverable class="bolck"> -->
     
       <n-card style="width: 700px;margin: auto;margin-top: 70px;">
-    <n-tabs
-      class="card-tabs"
-      default-value="signin"
-      size="large"
-      animated
-      pane-wrapper-style="margin: 0 -4px"
-      pane-style="padding-left: 4px; padding-right: 4px; box-sizing: border-box;"
-    >
+      <n-tabs
+        class="card-tabs"
+        default-value="signin"
+        size="large"
+        animated
+        pane-wrapper-style="margin: 0 -4px"
+        pane-style="padding-left: 4px; padding-right: 4px; box-sizing: border-box;"
+      >
       <n-tab-pane name="signin" tab="增加新用户">
+
         <n-form>
           <n-form-item-row label="用户名">
           <n-input v-model:value="name" type="text" placeholder="请输入用户名" @input="checkUsername"/>
@@ -78,9 +79,11 @@
   import { useRouter } from 'vue-router'
   import { defineComponent,ref } from 'vue'
   import { NSpace, NInput, NButton } from 'naive-ui'
+
   export default defineComponent({
     setup () {
       const value=ref(null)
+      const message = useMessage()
       const options=[
         {
           label: "翔安校区",
@@ -98,15 +101,14 @@
           label: '马来西亚校区',
           value:4
         },
-
       ]
-      const message=useMessage
       var showError=ref(false)
       var passwordsMatch=ref(2)
       var userNameMatch=ref(1);
       var userPhoneMatch=ref(1);
       var userEmailMatch=ref(1);
       var campusMatch=ref(1);
+      var userPhoto=ref();
       const router = useRouter()
         const name=ref("")
         const pickname=ref("")
@@ -115,24 +117,9 @@
         const passwd=ref("")
         const passwd2=ref("")
         const campus=ref("")
-      return {
-        name,
-        pickname,
-        phone,
-        email,
-        passwd,
-        passwd2,
-        campus,
-        confirm,
-        passwordsMatch,
-        userNameMatch,
-        userEmailMatch,
-        userPhoneMatch,
-        showError,
-        value,
-        options,
-        reset_user,checkUsername,checkEmail,checkPhoneNumber,checkPasswd,checkCampus
-      }
+        const showOverlay = ref(false)
+
+
       function checkCampus()
       {
         if(campus.value!='翔安'&&campus.value!='思明'&&campus.value!='漳州'&&campus.value!='马来西亚')
@@ -170,8 +157,8 @@
       userEmailMatch.value=1;
       userPhoneMatch.value=1;
       }
-    function checkUsername() {
 
+    function checkUsername() {
     if(name.value!=null && name.value.length>16)
     {
       console.log("用户名错误")
@@ -181,6 +168,7 @@
       userNameMatch.value=1;
     }
   }
+
   function checkPhoneNumber(){
   // 电话号码的正则表达式
   const sanitizedPhoneNumber = phone.value.replace(/\s/g, '').replace(/-/g, '');
@@ -201,8 +189,8 @@
     console.log("手机号格式错误");
     return false;
   }
-
 }
+
 function checkEmail() {
   if(email.value==='')
   {
@@ -225,19 +213,26 @@ function checkEmail() {
     return false;
   }
 }
-function checkPasswd()
-{
-  if(passwd.value===passwd2.value)
-        {
-          passwordsMatch.value=1;
-        }
-        else{
-          passwordsMatch.value=0;
-        }
-}
-}
+    function checkPasswd()
+    {
+      if(passwd.value===passwd2.value)
+            {
+              passwordsMatch.value=1;
+            }
+            else{
+              passwordsMatch.value=0;
+            }
+    }
+    return {
+        name,showError,showOverlay,userPhoto,pickname,phone,email,passwd,passwd2,campus,confirm,passwordsMatch,userNameMatch,userEmailMatch,
+        userPhoneMatch,campusMatch,showError,value,options,
+        reset_user,checkUsername,checkEmail,checkPhoneNumber,checkPasswd,checkCampus
+      }
   }
-  )
+  }
+)
+
+
   </script>
 
 <style>

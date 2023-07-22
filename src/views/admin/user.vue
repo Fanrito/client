@@ -62,15 +62,15 @@
         <td>操作</td>
       </thead>
       <tbody style="text-align:center; vertical-align:middle;">
-        <tr  v-for="user in displayedUsers" :key="user.id" style="background-color: rgb(255, 255, 255);"  >
+        <tr  v-for="user in users" :key="user.id" style="background-color: rgb(255, 255, 255);"  >
           <!-- 表格内容 -->
-          <td><input type="text" v-model="user.id" :disabled="editingRow !== user.id" /></td>
-          <td><input type="text" v-model="user.name" :disabled="editingRow !== user.id"/></td>
+          <td><input type="text" v-model="user.userId" :disabled="editingRow !== user.id" /></td>
+          <td><input type="text" v-model="user.userName" :disabled="editingRow !== user.id"/></td>
           <td><input type="text" v-model="user.nickname " :disabled="editingRow !== user.id"/></td>
           <td><input type="text" v-model="user.campus" :disabled="editingRow !== user.id"></td>
           <td><input type="text" v-model="user.passwd" :disabled="editingRow !== user.id"/></td>
-          <td><input type="text" v-model="user.email" :disabled="editingRow !== user.id"/></td>
-          <td><input type="text" v-model="user.phone" :disabled="editingRow !== user.id"/></td>
+          <td><input type="text" v-model="user.userEmail" :disabled="editingRow !== user.id"/></td>
+          <td><input type="text" v-model="user.userPhoneNum" :disabled="editingRow !== user.id"/></td>
           <td>
             <button id="edit" @click="editUser(user.id)" :disabled="editingRow !== null">Edit</button>
             <button @click="deleteUser(user.id)">Delete</button>
@@ -88,6 +88,8 @@
 import { ref ,computed} from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { CashOutline } from '@vicons/ionicons5'
+import{inject,onMounted} from 'vue'
+const axios=inject('axios')
 FlashOutline
 CashOutline
 import swal from 'sweetalert' // 导入 SweetAlert 库 负责删除/重置警告
@@ -98,31 +100,59 @@ let emailSearch=ref('')
 let phoneSearch=ref('')
 let nicknameSearch=ref('')
 let campusSearch=ref('')
-// 模拟用户数据
-const users = ref([
-{ id: 1, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 2, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 3, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 4, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 5, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 6, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 7, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 8, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 9, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 10, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 11, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 12, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 13, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 14, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 15, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 1, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 2, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 3, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 4, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-  { id: 5, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
-  { id: 6, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
-  { id: 7, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
-])
+// const users = ref([
+// { id: 1, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
+//   { id: 2, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
+//   { id: 3, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
+//   { id: 4, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
+//   { id: 5, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
+//   { id: 6, name: 'User 3', nickname:'Jack',passwd:'ahekwl',campus:'翔安',email: 'user3@example.com',phone:'123456' ,able:false},
+//   { id: 7, name: 'User 1',nickname:'Alice',passwd:'jhgyuihf',campus:'翔安',email: 'user1@example.com',phone:'123456',able:false},
+//   { id: 8, name: 'User 2', nickname:'Jone',passwd:'gjkkyf',campus:'翔安',email: 'user2@example.com',phone:'123456',able:false },
+// ])
+
+const users=ref([{id:1,name:2},{id:2}])//定义一个接收结果的数组
+//挂载后调用
+console.log('users.value')
+console.log(users.value[0].id)
+onMounted(async () => {
+  try {
+    console.log('页面用户电话')
+    console.log(phoneSearch.value)
+    console.log("当前页面")
+    console.log(currentPage.value)
+    console.log('搜索用户名条件')
+    console.log(usernameSearch.value)
+
+
+    const response = await axios.get('admin/user', {
+      params: {
+        page: currentPage.value,//当前页面
+        pageSize: 15, //一页15个数据
+        userName:usernameSearch.value,
+        userPhoneNum: phoneSearch.value,
+        userEmail: emailSearch.value,
+        userGender:0,
+        userStatus:1,
+        userNickname:nicknameSearch.value,
+      }
+    });
+    const data = response.data; // 假设返回的数据是一个数组
+    console.log(data);
+    // 处理数据
+    console.log('response.data.data.rows')
+    console.log(data.data.rows)
+   //Object.assign(users,data.data.rows)
+   users.value=data.data.rows
+    //把数据传递给user  
+    } catch (error) {
+    console.error(error);
+    // 处理错误
+    // ...
+  }
+});
+
+
 //当前页
 const currentPage = ref(1);
 const pageSize = 15; // 每页显示的用户数量
@@ -130,41 +160,41 @@ function handlePageChange(newPage) {
   currentPage.value = newPage;
 }
 //每页展示内容
-const displayedUsers = computed(() => {
+// const displayedUsers = computed(() => {
 
-  console.log(userIDSearch)
-  //搜索筛选，注意：此为测试用，实际的搜索在后端！
-    const filteredUsers = users.value.filter(user => {
-    return (user.name.includes(usernameSearch.value) 
-    && user.email.includes(emailSearch.value) 
-    && user.nickname.includes(nicknameSearch.value) 
-    && user.phone.includes(phoneSearch.value) 
-    && (userIDSearch.value===null||userIDSearch.value===undefined||userIDSearch.value===''||user.id===parseInt(userIDSearch.value))
-    && user.campus.includes(campusSearch.value)
-    )
-  });
-  const startIndex = (currentPage.value - 1) * pageSize;
-  console.log(currentPage.value)
-  console.log(startIndex)
-  const endIndex = startIndex + pageSize;
-  return filteredUsers.slice(startIndex, endIndex);
-});
+//   console.log(userIDSearch)
+//   //搜索筛选，注意：此为测试用，实际的搜索在后端！
+//     const filteredUsers = users.value.filter(user => {
+//     return (user.name.includes(usernameSearch.value) 
+//     && user.email.includes(emailSearch.value) 
+//     && user.nickname.includes(nicknameSearch.value) 
+//     && user.phone.includes(phoneSearch.value) 
+//     && (userIDSearch.value===null||userIDSearch.value===undefined||userIDSearch.value===''||user.id===parseInt(userIDSearch.value))
+//     && user.campus.includes(campusSearch.value)
+//     )
+//   });
+//   const startIndex = (currentPage.value - 1) * pageSize;
+//   console.log(currentPage.value)
+//   console.log(startIndex)
+//   const endIndex = startIndex + pageSize;
+//   return filteredUsers.slice(startIndex, endIndex);
+// });
 
 
 // 计算总页数
-const totalPages = computed(() => {
-  const filteredUsers = users.value.filter(user => {
-    return (user.name.includes(usernameSearch.value) 
-    && user.email.includes(emailSearch.value) 
-    && user.nickname.includes(nicknameSearch.value) 
-    && user.phone.includes(phoneSearch.value) 
-    && (userIDSearch===null||userIDSearch===undefined||userIDSearch.value===''||user.id===parseInt(userIDSearch.value))
-    && user.campus.includes(campusSearch.value)
-    )
-  }
-  );
-  return Math.ceil(filteredUsers.length / pageSize);
-});
+// const totalPages = computed(() => {
+//   const filteredUsers = users.value.filter(user => {
+//     return (user.name.includes(usernameSearch.value) 
+//     && user.email.includes(emailSearch.value) 
+//     && user.nickname.includes(nicknameSearch.value) 
+//     && user.phone.includes(phoneSearch.value) 
+//     && (userIDSearch===null||userIDSearch===undefined||userIDSearch.value===''||user.id===parseInt(userIDSearch.value))
+//     && user.campus.includes(campusSearch.value)
+//     )
+//   }
+//   );
+//   return Math.ceil(filteredUsers.length / pageSize);
+// });
 
 //接下来三个函数是为了实现编辑时解除封锁和确认编辑重新锁定的逻辑
 const editingRow = ref(null); // 跟踪当前正在编辑的行
@@ -190,14 +220,35 @@ const deleteUser = (userId) => {
     }
   });
 }
-function delete_user(userId) {
-  // 根据userId执行删除操作，例如：
-  const index = users.value.findIndex(user => user.id === userId);
-  if (index !== -1) {
-    users.value.splice(index, 1);
+// function delete_user(userId) {
+//   // 根据userId执行删除操作，例如：
+  
+//   const index = users.value.findIndex(user => user.id === userId);
+//   if (index !== -1) {
+//     users.value.splice(index, 1);
+//   }
+//}
+
+//删除用户
+//删除后要不要重新调用一个查询
+const delete_user = async (userId) => {
+  try {
+    const response = await axios.delete('admin/user/{ids}', {
+      params: {
+        ids: [1, 2, 3]
+      }
+    });
+    // 处理响应结果
+    console.log(response.data);
+
+  } catch (error) {
+    // 处理请求错误
+    console.error(error);
   }
-}
+};
+
 //重置用户
+//重置后要不要重新调用查询
 const resetUser = (userId) => {
   // 处理编辑逻辑
   console.log(`Reset user with ID: ${userId}`)
@@ -212,12 +263,26 @@ const resetUser = (userId) => {
       }
   });
 }
-function reset(userId)
+const reset=async(userId)=>
 {
-  const index = users.value.findIndex(user => user.id === userId);
-      if (index !== -1) {
-      users.value[index].passwd='123456';
-}
+  // const index = users.value.findIndex(user => user.id === userId);
+  //     if (index !== -1) {
+  //     users.value[index].passwd='123456';
+  //}
+  try{
+    const response=await axios.patch('admin/update',{
+      params:{
+        userId:userId,
+
+
+      }
+    })
+    
+
+  }catch(e)
+  {
+    console.log(e);
+  }
 }
 </script>
 

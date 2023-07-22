@@ -11,14 +11,14 @@
           </n-upload>
         </div>
         <div class="usernickname">
-          <span>{{ user.name }}</span>
+          <span>{{ user.userNickname }}</span>
         </div>
       </div>
       <div class="mt">
         <div class="mh">我的信息</div>
         <div class="mb">
           <span>用户名: {{ user.userName }}</span>
-          <span>性别: {{ user.userGender }}</span>
+          <span>性别: {{ user.userGender == 1 ? '男' : '女' }}</span>
           <span>电话: {{ user.userPhoneNum }}</span>
           <span>邮箱: {{ user.userEmail }}</span>
           <span>校区: {{ user.userCampus }}</span>

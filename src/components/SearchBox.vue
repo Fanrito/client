@@ -25,6 +25,6 @@ const callSearch = () => {
 }
 
 .search-input {
-  max-width: 400px;
+  min-width: 300px;
 }
 </style>

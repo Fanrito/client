@@ -2,8 +2,9 @@
   <div style="position: relative; width: 990px; background-color: #faf9f9; border: 1px solid #faf9f9; border-radius: 20px">
     <div class="guess-your-like"><span>猜你喜欢</span><img src="../../static/img/reconmand.png" alt="" /></div>
     <div class="goods-content">
-      <GoodCard v-for="(item, index) in goodsList" :imgSrc="item.imgSrc" :title="item.goodsName + item.goodsProfile" :price="item.curPrice" :linkHref="item.linkHref" class="item"></GoodCard>
+      <GoodCard v-for="(item, index) in goodsList" :imgSrc="item.imgSrc" :title="item.goodsName + item.goodsProfile" :price="item.curPrice" :linkHref="item.linkHref" class="item" :oriPrice="item.oriPrice" :publishTime="item.releaseTime"></GoodCard>
     </div>
+    <div ref="scrollObserver"></div>
     <SideNav :style="{ position: 'absolute', top: sideNavTop - 240 + 'px', left: sideNavLeft + 'px' }"></SideNav>
   </div>
 </template>
@@ -18,14 +19,19 @@ const axios = inject('axios')
 // 商品信息数组，需要渲染到页面上
 const goodsList = ref([
   {
-    imgSrc: 'src/static/img/phone.jpg',
-    curPrice: '1000',
+    imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
+    goodsId: 0,
     goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    goodsProfile: '',
-    // 商品列表里要有商品ID
-    linkHref: '/seller_detail?goodsId=1'
+    oriPrice: 2000,
+    curPrice: 1200,
+    goodsCategoryName: '电子产品',
+    releaseTime: '2023-07-17',
+    inventory: 1,
+    goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
+    linkHref: `/seller_detail/goods?goodsId=0`
   }
 ])
+const page = ref(0)
 
 const scrollTop = ref(0)
 const goodsContentOffset = ref(0)
@@ -40,14 +46,68 @@ onMounted(() => {
 
 // 从后端获取商品信息
 const loadGoods = async () => {
-  let res = await axios.get(`/goods/all`)
+  let res = await axios.get(`/goods/all`, {
+    page: page.value,
+    pageSize: 1
+  })
+  console.log({
+    page: page.value,
+    pageSize: 1
+  })
   console.log(res)
-  let temp_rows = res.data.data.rows
-  for (let row of temp_rows) {
-    let d = new Date(row.releaseTime)
-    row.releaseTime = `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`
+  if (res.data.code == 1) {
+    res.data.data.map(item => {
+      let goodsInfo = {
+        imgSrc: item.goodsImage,
+        goodsId: item.goodsId,
+        goodsName: item.goodsName,
+        oriPrice: item.oriPrice == null ? '' : item.oriPrice,
+        curPrice: item.curPrice,
+        goodsCategoryName: item.goodsCategoryName,
+        releaseTime: item.releaseTime,
+        inventory: item.inventory,
+        goodsProfile: item.goodsProfile,
+        linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
+      }
+      goodsList.value.push(goodsInfo)
+    })
   }
-  goodsList.value = temp_rows
+}
+
+// 当页面滚动到底部时触发请求更多商品数据的逻辑
+const observeScroll = () => {
+  const options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 1.0
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        fetchMoreProducts()
+      }
+    })
+  }, options)
+
+  const scrollObserver = ref(null)
+
+  onMounted(() => {
+    if (scrollObserver.value) {
+      observer.observe(scrollObserver.value)
+    }
+  })
+
+  return {
+    scrollObserver
+  }
+}
+
+const { scrollObserver } = observeScroll()
+
+const fetchMoreProducts = async () => {
+  page.value++
+  loadGoods()
 }
 
 function updateScrollTop() {
@@ -65,7 +125,7 @@ const sideNavTop = computed(() => {
 })
 
 const sideNavLeft = computed(() => {
-  return -200
+  return -180
 })
 </script>
 

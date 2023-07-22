@@ -1,6 +1,6 @@
 <template>
   <div class="side-navigation">
-    <n-menu :options="menuOptions" @update:value="handleUpdateValue" />
+    <n-menu :options="menuOptions"/>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
-const goodsTypes = ['数码', '文具', '图书', '服装', '医疗', '食品', '娱乐', '美妆', '自行车', '生活用品', '虚拟产品', '其他']
+const goodsTypes = ['数码', '文具', '图书', '服装', '医疗', '食品', '娱乐', '美妆', '代步', '生活', '虚拟', '其他']
 
 const menuOptions = [
   {
@@ -23,7 +23,7 @@ const menuOptions = [
       h(
         'a',
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          href: '/search?id=1',
           target: '_blank',
           rel: 'noopenner noreferrer'
         },
@@ -37,7 +37,7 @@ const menuOptions = [
       h(
         'a',
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          href: '/search?id=1',
           target: '_blank',
           rel: 'noopenner noreferrer'
         },
@@ -190,7 +190,7 @@ const menuOptions = [
 </script>
 <style scoped>
 .side-navigation {
-  width: 150px;
+  width: 140px;
   background: #fff;
   border: 1px solid #fff;
   border-radius: 20px;

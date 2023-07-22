@@ -41,8 +41,22 @@ const menuOptions = [
         },
         '个人中心'
       ),
-    key: 'login',
+    key: 'userCenter',
     icon: renderIcon(PersonIcon)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: '/login',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        '登录'
+      ),
+    key: 'login',
+    icon: renderIcon(BookIcon)
   }
 ]
 

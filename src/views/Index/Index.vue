@@ -4,6 +4,7 @@
     <TopNav class="w" style="margin-top: 50px"></TopNav>
     <Carousel style="margin: 20px auto"></Carousel>
     <GoodsContentVue></GoodsContentVue>
+    <n-back-top :right="100" />
     <Footer></Footer>
   </div>
 </template>

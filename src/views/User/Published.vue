@@ -27,7 +27,7 @@ let publishedGoodsList = ref([
     releaseTime: '2023-07-17',
     inventory: 1,
     goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/seller_detail/goods?goodsId=0`
+    linkHref: `/seller_detail/goods{?goodsId}=0`
   }
 ])
 

@@ -55,7 +55,7 @@ const loadSoldGoods = async () => {
     return
   }
   let res = await axios.get(`user/goods/${userid}`)
-  SoldGoodsList = res.data.data
+  Object.assign(SoldGoodsList, res.data.data)
 }
 </script>
 

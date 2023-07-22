@@ -6,7 +6,7 @@
       <span class="brand-text">厦小鱼二手交易网</span>
     </div>
     <div class="search-box">
-     <SearchBox searchTip="搜索你想要的商品" :search="search"></SearchBox>
+      <SearchBox searchTip="搜索你想要的商品" :search="search"></SearchBox>
     </div>
     <div class="topnav">
       <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
@@ -20,7 +20,9 @@ import SearchBox from '../../components/SearchBox.vue'
 import { NIcon } from 'naive-ui'
 import { BookOutline as BookIcon, PersonOutline as PersonIcon } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
+import { UserStore } from '../../stores/UserStore.js'
 
+const userStore = UserStore()
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
@@ -33,7 +35,7 @@ const menuOptions = [
       h(
         'a',
         {
-          href: '/login',
+          href: userStore.token ? '/user' : '/login',
           target: '_blank',
           rel: 'noopenner noreferrer'
         },
@@ -41,11 +43,11 @@ const menuOptions = [
       ),
     key: 'login',
     icon: renderIcon(PersonIcon)
-  },
+  }
 ]
 
-const search = (key) => {
-  console.log(key);
+const search = key => {
+  console.log(key)
 }
 </script>
 

@@ -23,7 +23,7 @@
           <span>邮箱: {{ user.userEmail }}</span>
           <span>校区: {{ user.userCampus }}</span>
         </div>
-        <div class="profile">个人简介: {{ user.profile }}</div>
+        <div class="profile">个人简介: {{ user.userProfile }}</div>
       </div>
     </div>
     <OtherInfo></OtherInfo>
@@ -40,17 +40,22 @@ import { NIcon, useMessage } from 'naive-ui'
 
 const axios = inject('axios')
 const message = useMessage()
+
 const handleFinish = ({ file, event }) => {
-  console.log(file)
-  console.log(event)
   message.success((event?.target).response)
   const ext = file.name.split('.')[1]
-  file.name = `${user.id}_avator.${ext}`
-  // file.url = '__HTTPS__://www.mocky.io/v2/5e4bafc63100007100d8b70f'
-  let res = axios.post('/upload/headImg', {
-    image: file
-  })
-  console.log(res);
+  file.name = `${user.userId}_avator.${ext}`
+  const config = {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }
+  let res = axios.post(
+    '/upload/headImg',
+    {
+      image: file
+    },
+    config
+  )
+  console.log(res)
   if (res.data.code == 1) {
     message.success('图片上传成功')
     user.userPhoto = res.data.data

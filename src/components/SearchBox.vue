@@ -1,11 +1,11 @@
 <template>
   <div class="search-box">
-    <n-input :placeholder="searchTip" class="search-input" v-model:value="content">
+    <n-input :placeholder="searchTip" class="search-input" v-model:value="content" size="large">
       <template #prefix>
         <n-icon :component="FlashOutline" />
       </template>
     </n-input>
-    <n-button type="primary" @click="callSearch()"> 搜索 </n-button>
+    <n-button type="primary" @click="callSearch()" style="" size="large"> 搜索 </n-button>
   </div>
 </template>
 

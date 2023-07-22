@@ -4,12 +4,12 @@
     <div class="goods-content">
       <GoodCard v-for="(item, index) in goodsList" :imgSrc="item.imgSrc" :title="item.goodsName + item.goodsProfile" :price="item.curPrice" :linkHref="item.linkHref" class="item"></GoodCard>
     </div>
-    <SideNav :style="{ position: 'absolute', top: sideNavTop + 'px', left: sideNavLeft + 'px' }"></SideNav>
+    <SideNav :style="{ position: 'absolute', top: sideNavTop - 240 + 'px', left: sideNavLeft + 'px' }"></SideNav>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed,inject } from 'vue'
+import { ref, reactive, onMounted, computed, inject } from 'vue'
 import GoodCard from '../../components/GoodCard.vue'
 import SideNav from './SideNav.vue'
 
@@ -65,7 +65,7 @@ const sideNavTop = computed(() => {
 })
 
 const sideNavLeft = computed(() => {
-  return -240
+  return -200
 })
 </script>
 

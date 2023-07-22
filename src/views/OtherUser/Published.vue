@@ -1,7 +1,6 @@
 <template>
   <div class="goods-content">
-    <GoodLongCard v-for="(item, index) in BoughtGoodsList" :key="index" :publish-time="item.releaseTime" :img-src="item.imgSrc" :title="item.goodsName + item.goodsProfile" :curPrice="item.curPrice" :oriPrice="item.oriPrice" :link-href="item.linkHref" :category="item.goodsCategoryName" class="item">
-    </GoodLongCard>
+    <GoodLongCard v-for="(item, index) in publishedGoodsList" :key="index" :publish-time="item.releaseTime" :img-src="item.imgSrc" :title="item.goodsName + item.goodsProfile" :curPrice="item.curPrice" :oriPrice="item.oriPrice" :link-href="item.linkHref" :category="item.goodsCategoryName" class="item"> </GoodLongCard>
   </div>
 </template>
 
@@ -17,7 +16,7 @@ const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()
 
-let BoughtGoodsList = ref([
+let publishedGoodsList = ref([
   {
     imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
     goodsId: 0,
@@ -36,28 +35,24 @@ onMounted(() => {
   loadPublishedGoods()
 })
 
-// 待修改
 const loadPublishedGoods = async () => {
-  let res = await axios.get(`user/order`)
+  let res = await axios.get(`user/goods`)
   console.log(res)
   if (res.data.code == 1) {
-    const id = userStore.id
     res.data.data.map(item => {
-      if (item.buyerId == id) {
-        let goodsInfo = {
-          imgSrc: item.goodsImage,
-          goodsId: item.goodsId,
-          goodsName: item.goodsName,
-          oriPrice: item.oriPrice,
-          curPrice: item.curPrice,
-          goodsCategoryName: item.goodsCategoryName,
-          releaseTime: item.releaseTime,
-          inventory: item.inventory,
-          goodsProfile: item.goodsProfile,
-          linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
-        }
-        BoughtGoodsList.value.push(goodsInfo)
+      let goodsInfo = {
+        imgSrc: item.goodsImage,
+        goodsId: item.goodsId,
+        goodsName: item.goodsName,
+        oriPrice: item.oriPrice,
+        curPrice: item.curPrice,
+        goodsCategoryName: item.goodsCategoryName,
+        releaseTime: item.releaseTime,
+        inventory: item.inventory,
+        goodsProfile: item.goodsProfile,
+        linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
       }
+      publishedGoodsList.value.push(goodsInfo)
     })
   }
 }

@@ -4,25 +4,33 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { defineComponent, h } from 'vue'
 import { NIcon, useMessage } from 'naive-ui'
 import { RouterLink } from 'vue-router'
-import { BookOutline as BookIcon, PersonOutline as PersonIcon, WineOutline as WineIcon, HomeOutline as HomeIcon } from '@vicons/ionicons5'
-
+import { PhonePortraitOutline, Pencil, BookOutline, AccessibilityOutline, FastFoodOutline, GameControllerOutline, Bicycle } from '@vicons/ionicons5'
+import { LocalHospitalOutlined, NightlifeRound, ComputerFilled, OtherHousesOutlined } from '@vicons/material'
+import { SmileTwotone } from '@vicons/antd'
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
 
+const goodsTypes = ['数码', '文具', '图书', '服装', '医疗', '食品', '娱乐', '美妆', '自行车', '生活用品', '虚拟产品', '其他']
+
 const menuOptions = [
   {
-    key: 'divider-1',
-    type: 'divider',
-    props: {
-      style: {
-        marginLeft: '32px'
-      }
-    }
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[0]
+      ),
+    key: '0',
+    icon: renderIcon(PhonePortraitOutline)
   },
   {
     label: () =>
@@ -33,96 +41,156 @@ const menuOptions = [
           target: '_blank',
           rel: 'noopenner noreferrer'
         },
-        '且听风吟'
+        goodsTypes[1]
       ),
-    key: 'hear-the-wind-sing',
-    icon: renderIcon(BookIcon)
+    key: '1',
+    icon: renderIcon(Pencil)
   },
   {
-    label: '1973年的弹珠玩具',
-    key: 'pinball-1973',
-    icon: renderIcon(BookIcon),
-    disabled: false,
-    children: [
-      {
-        label: '鼠',
-        key: 'rat'
-      }
-    ]
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[2]
+      ),
+    key: '2',
+    icon: renderIcon(BookOutline)
   },
   {
-    label: '寻羊冒险记',
-    key: 'a-wild-sheep-chase',
-    icon: renderIcon(BookIcon),
-    disabled: false
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[3]
+      ),
+    key: '3',
+    icon: renderIcon(AccessibilityOutline)
   },
   {
-    label: '舞，舞，舞',
-    key: 'dance-dance-dance',
-    icon: renderIcon(BookIcon),
-    children: [
-      {
-        type: 'group',
-        label: '人物',
-        key: 'people',
-        children: [
-          {
-            label: '叙事者',
-            key: 'narrator',
-            icon: renderIcon(PersonIcon)
-          },
-          {
-            label: '羊男',
-            key: 'sheep-man',
-            icon: renderIcon(PersonIcon)
-          }
-        ]
-      },
-      {
-        label: '饮品',
-        key: 'beverage',
-        icon: renderIcon(WineIcon),
-        children: [
-          {
-            label: '威士忌',
-            key: 'whisky'
-          }
-        ]
-      },
-      {
-        label: '食物',
-        key: 'food',
-        children: [
-          {
-            label: '三明治',
-            key: 'sandwich'
-          }
-        ]
-      },
-      {
-        label: '过去增多，未来减少',
-        key: 'the-past-increases-the-future-recedes'
-      }
-    ]
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[4]
+      ),
+    key: '4',
+    icon: renderIcon(LocalHospitalOutlined)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[5]
+      ),
+    key: '5',
+    icon: renderIcon(FastFoodOutline)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[6]
+      ),
+    key: '6',
+    icon: renderIcon(GameControllerOutline)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[7]
+      ),
+    key: '7',
+    icon: renderIcon(SmileTwotone)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[8]
+      ),
+    key: '8',
+    icon: renderIcon(Bicycle)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[9]
+      ),
+    key: '9',
+    icon: renderIcon(NightlifeRound)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[10]
+      ),
+    key: '10',
+    icon: renderIcon(ComputerFilled)
+  },
+  {
+    label: () =>
+      h(
+        'a',
+        {
+          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
+          target: '_blank',
+          rel: 'noopenner noreferrer'
+        },
+        goodsTypes[11]
+      ),
+    key: '11',
+    icon: renderIcon(OtherHousesOutlined)
   }
 ]
-
-export default defineComponent({
-  setup() {
-    const message = useMessage()
-    return {
-      menuOptions,
-      handleUpdateValue(key, item) {
-        message.info('[onUpdate:value]: ' + JSON.stringify(key))
-        message.info('[onUpdate:value]: ' + JSON.stringify(item))
-      }
-    }
-  }
-})
 </script>
 <style scoped>
 .side-navigation {
-  width: 200px;
+  width: 150px;
   background: #fff;
   border: 1px solid #fff;
   border-radius: 20px;

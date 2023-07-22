@@ -150,7 +150,7 @@ const selectGender = ref([
   },
   {
     label: '女',
-    value: 2
+    value: 0
   }
 ])
 

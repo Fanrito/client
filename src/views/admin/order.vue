@@ -12,29 +12,29 @@
       <div class="search-row">
         <div class="search-field">
           <span style="width: 35%;margin-left: 20%;text-align: right;">订单号</span>
-          <n-input v-model="usernameSearch" placeholder="搜索订单号" size="small"></n-input>
+          <n-input v-model="order_id" placeholder="搜索订单号" size="small"></n-input>
         </div>
         <div class="search-field">
           <span  style="width: 35%;margin-left: 20%;text-align: right;">商品名称</span>
-          <n-input v-model="userIDSearch" placeholder="搜索商品名称" size="small"></n-input>
+          <n-input v-model="goods_name" placeholder="搜索商品名称" size="small"></n-input>
         </div>
         <div class="search-field">
-          <span  style="width: 35%;margin-left: 20%;text-align: right;">用户名</span>
-          <n-input v-model="nicknameSearch" placeholder="搜索用户名" size="small"></n-input>
+          <span  style="width: 35%;margin-left: 20%;text-align: right;">买家用户名</span>
+          <n-input v-model="buyer_name" placeholder="搜索用户名" size="small"></n-input>
         </div>
       </div>
       <div class="search-row">
         <div class="search-field">
-          <span  style="width: 35%;margin-left: 20%;text-align: right;">订单日期</span>
-          <n-input v-model="emailSearch" placeholder="搜索订单日期" size="small"></n-input>
+          <span  style="width: 35%;margin-left: 20%;text-align: right;">卖家用户名</span>
+          <n-input v-model="seller_name" placeholder="" size="small"></n-input>
         </div>
         <div class="search-field">
-          <span  style="width: 35%;margin-left: 20%;text-align: right;">订单数量</span>
-          <n-input v-model="phoneSearch" placeholder="搜索订单数量" size="small"></n-input>
+          <span  style="width: 35%;margin-left: 20%;text-align: right;">开始时间</span>
+          <n-input v-model="begin_time" placeholder="订单开始时间" size="small"></n-input>
         </div>
         <div class="search-field">
-          <span  style="width: 35%;margin-left: 20%;text-align: right;">订单总价</span>
-          <n-input v-model="campusSearch" placeholder="搜索订单总价" size="small"></n-input>
+          <span  style="width: 35%;margin-left: 20%;text-align: right;">结束时间</span>
+          <n-input v-model="end_time" placeholder="订单结束时间" size="small"></n-input>
         </div>
       </div>
     </div>
@@ -49,26 +49,26 @@
     <thead style="text-align:center; vertical-align:middle;background-color:rgb(240, 246, 241);">
       <!-- 表头部分 -->
       <td>订单编号</td>
-      <td>用户名</td>
-      <td>商品名称</td>
-      <td>订单日期</td>
+      <td>买家用户名</td>
+      <td>卖家用户名</td>
+      <td>订单时间</td>
       <td>订单数量</td>
       <td>订单总价</td>
       <td>操作</td>
     </thead>
     <tbody style="text-align:center; vertical-align:middle;">
-      <tr  v-for="user in displayedUsers" :key="user.id"  style="background-color: rgb(255, 255, 255);" >
+      <tr  v-for="order in orders" :key="order.orderId"  style="background-color: rgb(255, 255, 255);" >
         <!-- 表格内容 -->
-        <td><input type="text" v-model="user.order_id" :disabled="editingRow !== user.order_id"/></td>
-        <td><input type="text" v-model="user.user_name" :disabled="editingRow !== user.order_id"/></td>
-        <td><input type="text" v-model="user.goods_name " :disabled="editingRow !== user.order_id"/></td>
-        <td><input type="text" v-model="user.order_time" :disabled="editingRow !== user.order_id"/></td>
-        <td><input type="text" v-model="user.number" :disabled="editingRow !== user.order_id"/></td>
-        <td><input type="text" v-model="user.sum_price" :disabled="editingRow !== user.order_id"/></td>
+        <td><input type="text" v-model="order.orderId" :disabled="editingRow !== order.orderId"/></td>
+        <td><input type="text" v-model="order.buyerName" :disabled="editingRow !== order.orderId"/></td>
+        <td><input type="text" v-model="order.sellerName " :disabled="editingRow !== order.orderId"/></td>
+        <td><input type="text" v-model="order.orderDateTime" :disabled="editingRow !== order.orderId"/></td>
+        <td><input type="text" v-model="order.orderNum" :disabled="editingRow !== order.orderId"/></td>
+        <td><input type="text" v-model="order.SumPrice" :disabled="editingRow !== order.orderId"/></td>
         <td>
-          <button id="edit" @click="editUser(user.order_id)" :disabled="editingRow !== null">Edit</button>
-          <button @click="deleteUser(user.order_id)">Delete</button>
-          <button @click="resetUser(user.order_id)">Reset</button>
+          <button id="edit" @click="editUser(order.orderId)" :disabled="editingRow !== null">Edit</button>
+          <button @click="deleteUser(order.orderId)">Delete</button>
+          <button @click="resetUser(order.orderId)">Reset</button>
         </td>
       </tr>
     </tbody>
@@ -79,48 +79,68 @@
 </template>
 
 <script setup>
-import { ref,computed } from 'vue'
+import { ref,computed,onMounted,inject } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import swal from 'sweetalert' // 导入 SweetAlert 库
+const axios=inject('axios')
 // 模拟用户数据
 FlashOutline
 import { CashOutline } from '@vicons/ionicons5'
+import { NRow } from 'naive-ui';
 CashOutline
-const users = ref([
-{ order_id: 1, user_name: 'User 1',goods_name:'Apple',order_time:'jhgyuihf',number: 12,sum_price:'123456',able:false},
-{ order_id: 2, user_name: 'User 2', goods_name:'Apple',order_time:'gjkkyf',number: 1,sum_price:'123456',able:false },
-{ order_id: 3, user_name: 'User 3', goods_name:'Apple',order_time:'ahekwl',number: 1,sum_price:'123456' ,able:false},
-{ order_id: 4, user_name: 'User 1',goods_name:'Apple',order_time:'jhgyuihf',number: 1,sum_price:'123456',able:false},
-{ order_id: 5, user_name: 'User 2', goods_name:'Apple',order_time:'gjkkyf',number: 1,sum_price:'123456',able:false },
-{ order_id: 6, user_name: 'User 3', goods_name:'Apple',order_time:'ahekwl',number: 1,sum_price:'123456' ,able:false},
-{ order_id: 7, user_name: 'User 1',goods_name:'Apple',order_time:'jhgyuihf',number: 1,sum_price:'123456',able:false},
-{ order_id: 8, user_name: 'User 2', goods_name:'Apple',order_time:'gjkkyf',number:1,sum_price:'123456',able:false },
-{ order_id: 9, user_name: 'User 3', goods_name:'Apple',order_time:'ahekwl',number: 2,sum_price:'123456' ,able:false},
-{ order_id: 10, user_name: 'User 1',goods_name:'Apple',order_time:'jhgyuihf',number: 3,sum_price:'123456',able:false},
-{ order_id: 11, user_name: 'User 2', goods_name:'Jone',order_time:'gjkkyf',number: 4,sum_price:'123456',able:false },
-{ order_id: 12, user_name: 'User 3', goods_name:'Jack',order_time:'ahekwl',number: 5,sum_price:'123456' ,able:false},
-{ order_id: 13, user_name: 'User 1',goods_name:'Apple',order_time:'jhgyuihf',number: 6,sum_price:'123456',able:false},
-{ order_id: 14, user_name: 'User 2', goods_name:'Apple',order_time:'gjkkyf',number: 2,sum_price:'123456',able:false },
-{ order_id: 15, user_name: 'User 3', goods_name:'Jack',order_time:'ahekwl',number: 1,sum_price:'123456' ,able:false},
+let begin_time=ref()
+let end_time=ref()
+let buyer_name=ref("")
+let seller_name=ref("")
+let goods_name=ref("")
+const orders=ref([{orderId:1}])//定义一个接收结果的数组
+let ordersNum=ref(0)//记录数
+//挂载后调用
+onMounted(async () => {
+  try {
+    console.log('页面用户电话')
+    console.log(seller_name.value)
+    console.log("当前页面")
+    console.log(currentPage.value)
+    console.log('搜索用户名条件')
+    console.log(goods_name.value)
+    const response = await axios.get('admin/orders', 
+     {
+      "page":1,
+      "pageSize":15
+     }
+    );
+    const data = response.data; // 假设返回的数据是一个数组
+    console.log(data);
+    // 处理数据
+    orders=data.data.rows
+    rdersNum=response.data.data.total
+    //把数据传递给user  
+    } catch (error) {
+    console.error(error);
+    // 处理错误
+    // ...
+  }
+});
 
-])
+
 //当前页
 const currentPage = ref(1);
 const pageSize = 15; // 每页显示的用户数量
 function handlePageChange(newPage) {
   currentPage.value = newPage;
 }
-//需要展示的数据
-// 根据当前页码和页大小计算分页展示的用户数据
-const displayedUsers = computed(() => {
-  const startIndex = (currentPage.value - 1) * pageSize;
-  const endIndex = startIndex + pageSize;
-  return users.value.slice(startIndex, endIndex);
-});
+// //需要展示的数据
+// // 根据当前页码和页大小计算分页展示的用户数据
+// const displayedUsers = computed(() => {
+//   const startIndex = (currentPage.value - 1) * pageSize;
+//   const endIndex = startIndex + pageSize;
+//   return users.value.slice(startIndex, endIndex);
+// });
 
-// 计算总页数
-console.log(Math.ceil(users.value.length / pageSize))
-const totalPages = computed(() => Math.ceil(users.value.length / pageSize));
+// // 计算总页数
+// console.log(Math.ceil(users.value.length / pageSize))
+const totalPages = computed(() => Math.ceil(ordersNum / pageSize));
 
 const editingRow = ref(null); // 跟踪当前正在编辑的行
 
@@ -145,9 +165,11 @@ swal({
   }
 });
 }
+
+
 function delete_user(userId) {
 // 根据userId执行删除操作，例如：
-const index = users.value.findIndex(user => user.order_id === userId);
+const index = users.value.findIndex(user => order.orderId === userId);
 if (index !== -1) {
   users.value.splice(index, 1);
 }
@@ -168,7 +190,7 @@ swal({
 }
 function reset(userId)
 {
-const index = users.value.findIndex(user => user.order_id === userId);
+const index = users.value.findIndex(user => order.orderId === userId);
     if (index !== -1) {
     users.value[index].order_time='123456';
 }

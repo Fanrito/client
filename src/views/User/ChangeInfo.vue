@@ -155,7 +155,7 @@ const selectGender = ref([
 ])
 
 onMounted(() => {
-  loadUser()
+   loadUser()
 })
 
 const loadUser = async () => {

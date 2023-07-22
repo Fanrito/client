@@ -23,7 +23,7 @@ const goodsList = ref([
     goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
     goodsProfile: '',
     // 商品列表里要有商品ID
-    linkHref: '/detail?goodsId=1'
+    linkHref: '/seller_detail?goodsId=1'
   }
 ])
 

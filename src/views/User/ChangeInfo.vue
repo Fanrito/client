@@ -150,12 +150,12 @@ const selectGender = ref([
   },
   {
     label: '女',
-    value: 2
+    value: 0
   }
 ])
 
 onMounted(() => {
-  loadUser()
+   loadUser()
 })
 
 const loadUser = async () => {

@@ -21,6 +21,8 @@ const route = useRoute()
 
 const axios = inject('axios')
 const message = inject('message')
+const userId = inject('userId')
+
 const userStore = UserStore()
 
 const commentsList = reactive([
@@ -45,7 +47,7 @@ onMounted(() => {
 })
 
 const getComments = async () => {
-  let res = await axios.get(`user/comment/1`)
+  let res = await axios.get(`user/comment/${userId}`)
   console.log();
   commentsList = res.data.data
 }

@@ -3,7 +3,7 @@
     <n-card title="登录">
       <n-tabs type="line" animated>
         <n-tab-pane name="密码登录" tab="密码登录">
-          <n-form :rules="rules" :model="user">
+          <n-form :rules="rules" :model="user" ref="formRef">
             <n-form-item path="username" label="用户名">
               <n-input v-model:value="user.username" placeholder="请输入账号"></n-input>
             </n-form-item>
@@ -17,11 +17,11 @@
         <n-tab-pane name="手机号登录" tab="手机号登录">
           <n-form :rules="rules" :model="user">
             <n-form-item path="phone" label="手机号">
-              <n-input v-model:value="phone" placeholder="请输入手机号"></n-input>
+              <n-input v-model:value="user.phone" placeholder="请输入手机号"></n-input>
               <n-button @click="sendPhoneVeriCode" :disabled="isButtonDisabled">发送验证码{{ remainingTime == 60 ? '' : '(' + remainingTime + ')' }}</n-button>
             </n-form-item>
             <n-form-item path="veriCode" label="验证码">
-              <n-input v-model:value="veriCode" placeholder="请输入验证码"></n-input>
+              <n-input v-model:value="user.veriCode" placeholder="请输入验证码"></n-input>
             </n-form-item>
           </n-form>
           <n-button @click="login2">登录</n-button>
@@ -29,14 +29,14 @@
         <n-tab-pane name="邮箱登录" tab="邮箱登录">
           <n-form :rules="rules" :model="user">
             <n-form-item path="email" label="邮箱">
-              <n-input v-model:value="email" placeholder="请输入账号"></n-input>
+              <n-input v-model:value="user.email" placeholder="请输入账号"></n-input>
               <n-button @click="sendEmailVeriCode" :disabled="isButtonDisabled">发送验证码{{ remainingTime == 60 ? '' : '(' + remainingTime + ')' }}</n-button>
             </n-form-item>
             <n-form-item path="veriCode" label="验证码">
-              <n-input v-model:value="veriCode" placeholder="请输入验证码"></n-input>
+              <n-input v-model:value="user.veriCode" placeholder="请输入验证码"></n-input>
             </n-form-item>
           </n-form>
-          <n-button @click="login3">登录</n-button>
+          <n-button @click="login2">登录</n-button>
         </n-tab-pane>
       </n-tabs>
     </n-card>
@@ -48,20 +48,19 @@ import { ref, reactive, inject } from 'vue'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
-const route = useRoute()
-
 const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()
 
+const formRef = ref(null)
 let rember = ref(false)
 let user = reactive({
   username: userStore.username || '',
-  password: rember ? userStore.password : ''
+  password: rember ? userStore.password : '',
+  phone: '',
+  email: '',
+  veriCode: ''
 })
-let veriCode = ref('')
-let phone = ref('')
-let email = ref('')
 
 let rules = {
   username: [
@@ -85,55 +84,88 @@ let rules = {
 }
 
 // 密码登录
-const login1 = async () => {
-  if (user.username === 'admin') {
-    router.push('/admin/user')
-    return
-  }
-  let result = await axios.post('/login', {
-    loginWay: 1,
-    username: user.username,
-    password: user.password,
-    email: null,
-    phoneNum: null
-  })
-  console.log(result)
-  if (result.data.code == 1) {
-    userStore.token = result.data.data
-    if (rember) {
-      userStore.username = user.username
-      userStore.password = user.password
+const login1 = async e => {
+  e.preventDefault()
+  formRef.value?.validate(async errors => {
+    if (errors) {
+      message.error('请正确输入用户名和密码！')
+    } else {
+      let result = await axios.post('/login', {
+        loginWay: 1,
+        username: user.username,
+        password: user.password,
+        email: null,
+        phoneNum: null
+      })
+      console.log(result)
+      if (result.data.code == 1) {
+        userStore.token = result.data.data
+        if (rember) {
+          userStore.username = user.username
+          userStore.password = user.password
+        }
+        message.success('登陆成功')
+        if (user.username === 'admin') {
+          router.push('/admin/user')
+          return
+        }
+        router.push('/user')
+      } else {
+        message.error('登陆失败')
+      }
     }
-    message.info('登陆成功')
-    router.push('/user')
-  } else {
-    message.error('登陆失败')
-  }
+  })
 }
 
-// 手机号登录
-const login2 = async () => {
-  let result = await axios.post('/login', {
-    loginWay: 2,
-    username: null,
-    password: null,
-    email,
-    phoneNum: phone
+// 发送手机验证码
+const sendPhoneVeriCode = async () => {
+  sendVeriCode()
+  let result = await axios.post('/login/phone', {
+    email: user.email
   })
   console.log(result)
   if (result.data.code == 1) {
-    userStore.token = result.data.data
-    message.info('登陆成功')
-    router.push('/user')
+    message.info('验证码已发送')
   } else {
-    message.error('登陆失败')
+    message.error('发送失败')
+  }
+}
+// 发送邮箱验证码
+const sendEmailVeriCode = async () => {
+  sendVeriCode()
+  let result = await axios.post('/login/email', {
+    phoneNum: user.phone
+  })
+  console.log(result)
+  if (result.data.code == 1) {
+    message.info('验证码已发送')
+  } else {
+    message.error('发送失败')
+  }
+}
+const login2 = async () => {
+  if (user.veriCode == '') {
+    message.error('请输入验证码！')
+  } else {
+    let result = await axios.post('/valid', {
+      email: user.email,
+      phone: user.phone,
+      valid: user.veriCode
+    })
+    if (result.data.code == 1) {
+      userStore.token = result.data.data
+      message.success('登陆成功')
+    } else {
+      message.error('验证码错误')
+    }
   }
 }
 
 // 验证码发送按钮禁用与允许相关
 const isButtonDisabled = ref(false)
 const remainingTime = ref(60)
-const sendPhoneVeriCode = () => {
+const sendVeriCode = () => {
+  console.log('send')
   if (!isButtonDisabled.value) {
     isButtonDisabled.value = true
     countdown()

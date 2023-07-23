@@ -7,17 +7,18 @@
       {{ title }}
     </div>
     <div class="price-content">
-      <span>￥{{ price }}</span>
+      <span style="text-decoration: line-through">{{ '￥' + oriPrice }}</span>
+      ￥{{ price }}
     </div>
   </a>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
-const props = defineProps(['imgSrc', 'title', 'price', 'linkHref'])
+const props = defineProps(['imgSrc', 'title', 'price', 'linkHref', 'oriPrice'])
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 img {
   display: block;
   width: 100%;
@@ -35,6 +36,10 @@ img {
   width: 194px;
   height: 194px;
   box-sizing: border-box;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .title-content {

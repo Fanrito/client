@@ -19,10 +19,8 @@ import { ref, reactive, inject, h } from 'vue'
 import SearchBox from '../../components/SearchBox.vue'
 import { NIcon } from 'naive-ui'
 import { BookOutline as BookIcon, PersonOutline as PersonIcon } from '@vicons/ionicons5'
+import { RouterLink } from 'vue-router'
 import { UserStore } from '../../stores/UserStore.js'
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()
-const route = useRoute()
 
 const userStore = UserStore()
 function renderIcon(icon) {
@@ -64,7 +62,7 @@ const menuOptions = [
 
 const search = key => {
   console.log(key)
-  router.push('/search')
+  push('/seach')
 }
 </script>
 

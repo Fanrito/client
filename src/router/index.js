@@ -13,6 +13,11 @@ const router = createRouter({
       component: () => import('../views/Index/Index.vue')
     },
     {
+      path: '/search',
+      name: 'search',
+      component: () => import('../views/Search/Search.vue')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/Login/Login.vue'),
@@ -31,6 +36,15 @@ const router = createRouter({
         { path: '/user/sold', component: () => import('../views/User/Sold.vue') },
         { path: '/user/comments', component: () => import('../views/User/Comments.vue') },
         { path: '/user/published', component: () => import('../views/User/Published.vue') },
+      ]
+    },
+    {
+      path: '/otherUser/:userId',
+      name: 'otherUser',
+      component: () => import('../views/otherUser/User.vue'),
+      children: [
+        { path: '/otherUser/comments', component: () => import('../views/OtherUser/Comments.vue') },
+        { path: '/otherUser', component: () => import('../views/OtherUser/Published.vue') },
       ]
     },
     {

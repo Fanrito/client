@@ -14,6 +14,7 @@ const route = useRoute()
 
 const axios = inject('axios')
 const message = inject('message')
+const userId = inject('userId')
 const userStore = UserStore()
 
 let publishedGoodsList = ref([
@@ -27,7 +28,7 @@ let publishedGoodsList = ref([
     releaseTime: '2023-07-17',
     inventory: 1,
     goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/seller_detail/goods{?goodsId}=0`
+    linkHref: `/seller_detail/goods?goodsId=0`
   }
 ])
 
@@ -36,12 +37,12 @@ onMounted(() => {
 })
 
 const loadPublishedGoods = async () => {
-  let res = await axios.get(`user/goods`)
+  let res = await axios.get(`other/goods/${userId}`)
   console.log(res)
   if (res.data.code == 1) {
     res.data.data.map(item => {
       let goodsInfo = {
-        imgSrc: item.goodsPhotos.length > 0 ? item.goodsPhotos[0] : '../../static/phone.jpg',
+        imgSrc: item.goodsImage,
         goodsId: item.goodsId,
         goodsName: item.goodsName,
         oriPrice: item.oriPrice,

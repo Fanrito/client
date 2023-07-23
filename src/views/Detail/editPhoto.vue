@@ -7,6 +7,7 @@
       <n-upload
     action="https://www.mocky.io/v2/5e4bafc63100007100d8b70f"
     :default-file-list="fileList"
+    default-upload=false
     list-type="image-card"
   >
     点击上传

@@ -18,7 +18,7 @@
         <n-layout-content content-style="padding: 24px;">
           <div align="left"><font color="grey">发布时间 {{ res.data[0].releaseTime.split('T').join(' ') }}</font></div><br><br>
           <n-space horizon align-items="center">
-            
+          
           <n-avatar
             size="medium"
             src="https://ts1.cn.mm.bing.net/th/id/R-C.aebfcdbd3f02c587d7e934844afbefb1?rik=tMAHyv2uAMaAig&riu=http%3a%2f%2fwww.gx8899.com%2fuploads%2fallimg%2f2018032907%2ff5k1dygjyrb.jpg&ehk=V86NlW9MNqDhn56lebJWVEpyPBeiITte7sqMlJk4ZC4%3d&risl=&pid=ImgRaw&r=0"
@@ -58,7 +58,6 @@
         </n-layout-footer>
       </n-layout>
     </n-layout>
-
     
     <!-- 下面的评价信息 -->
     <n-layout>
@@ -90,10 +89,12 @@
 import TopUI from '../Index/TopNav.vue';
 import ImageShow from './ImageShow.vue';
 import InfoChoose from './InfoChoose.vue';
-// import { NDialogProvider } from 'naive-ui';
+import { UserStore } from '../../stores/UserStore';
 import {ref,onMounted,inject} from 'vue';
 const axios = inject('axios');
+const userStore=UserStore();
 
+// 前面的逻辑绑定了，这里不用改了
 let res=ref({
   "code": 1,
   "msg": "success",
@@ -113,56 +114,28 @@ let res=ref({
                 "https://th.bing.com/th/id/R.f7ed7e216a92f91882f100a2581b9ac6?rik=7y4ciD%2bJL3VuVg&pid=ImgRaw&r=0",
                 "https://th.bing.com/th/id/OIP.caoz0WhiAKT7-PfdN0S4dAHaE8?pid=ImgDet&w=800&h=535&rs=1",
                 "https://th.bing.com/th/id/OIP.QwUNM329lhtfEI60_kjnbgHaDF?pid=ImgDet&w=750&h=312&rs=1"
-          ] //  
+          ]
       }
   ]
 })
 
-// 查询商品接口，后续修改
-
-// onMounted(async()=>{
-//   // 获取当前商品的ID
-//   const urlParams = new URLSearchParams(window.location.search);
-//   const goodsId = urlParams.get('goodsId');
-//   const response = await axios.get(`goods/${goodsId}`);
-//   // 
-//   Object.assign(res, response.data);
-// })
-
-// 添加到购物车
-// const addToCart = async (userId,goodsId,collectNum) => {
-//   try {
-//     const response = await axios.put('goods/cart', { userId,goodsId,collectNum });
-//     // 处理响应数据
-//     let res=ref({});
-//     Object.assign(res, response.data);
-//     if(res.value.code===1){
-//       console.log("成功");
-//     }else{
-
-//     }
-//   } catch (error) {
-//     // 处理错误
-//   }
-// };
-
-
-// 立即购买
-
-// 添加到购物车
-// const buyNow = async (userId,goodsId,collectNum) => {
-//   try {
-//     const response = await axios.put('goods/purchase', { userId,goodsId,collectNum });
-//     // 处理响应数据
-//     let res=ref({});
-//     Object.assign(res, response.data);
-//     if(res.value.code===1){
-//       console.log("成功");
-//     }else{
-
-//     }
-//   } catch (error) {
-//     // 处理错误
-//   }
-// };
+// 查询此商品的信息
+onMounted(async()=>{
+  // 获取当前商品的ID
+  const urlParams = new URLSearchParams(window.location.search);
+  const goodsId = urlParams.get('goodsId');
+  axios.get('/goods', { 
+    body:{ goodsId: goodsId},
+    headers: {
+        'token': userStore.token
+    }
+  }).then(response => {
+      // 处理响应数据
+      Object.assign(res, response.data);
+  })
+  .catch(error => {
+      // 处理错误
+      console.log("异常");
+  });
+})
 </script>

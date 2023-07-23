@@ -29,13 +29,17 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, toRefs, inject } from 'vue'
+import { ref, reactive, onMounted, toRefs, inject, provide } from 'vue'
 import TopNav from './TopNav.vue'
 import OtherInfo from './OtherInfo.vue'
 import Footer from '../../components/Footer.vue'
 import { NIcon, useMessage } from 'naive-ui'
 import { UserStore } from '../../stores/UserStore.js'
+import { useRouter, useRoute } from 'vue-router'
+
 const userStore = UserStore()
+const router = useRouter()
+const route = useRoute()
 
 const axios = inject('axios')
 const message = useMessage()
@@ -53,12 +57,15 @@ const user = reactive({
   userStatus: null
 })
 
+const userId = route.params.userId
+provide('userId', userId)
+
 onMounted(() => {
   loadUser()
 })
 
 const loadUser = async () => {
-  let res = await axios.get(`/user/${id}`)
+  let res = await axios.get(`/other/${userId}`)
   console.log(res)
   Object.assign(user, res.data.data)
 }

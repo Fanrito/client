@@ -42,16 +42,15 @@ const axios = inject('axios')
 const message = useMessage()
 
 const handleFinish = ({ file, event }) => {
-  message.success((event?.target).response)
   const ext = file.name.split('.')[1]
   file.name = `${user.userId}_avator.${ext}`
   const config = {
     headers: { 'Content-Type': 'multipart/form-data' }
   }
   let res = axios.post(
-    '/upload/headImg',
+    '/upload/Imgs',
     {
-      image: file
+      image: [file]
     },
     config
   )
@@ -94,7 +93,6 @@ onMounted(() => {
 
 const loadUser = async () => {
   let res = await axios.get('/user')
-  console.log(res)
   Object.assign(user, res.data.data)
 }
 
@@ -106,7 +104,6 @@ const uploadAvator = async () => {
   axios
     .patch('/user/update', param)
     .then(response => {
-      console.log('User information updated successfully:', response.data)
       if (response.code == 1) {
         message.info('提交成功')
       } else if (response.code == 0) {

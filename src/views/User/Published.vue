@@ -41,7 +41,7 @@ const loadPublishedGoods = async () => {
   if (res.data.code == 1) {
     res.data.data.map(item => {
       let goodsInfo = {
-        imgSrc: item.goodsImage,
+        imgSrc: item.goodsPhotos.length > 0 ? item.goodsPhotos[0] : '../../static/phone.jpg',
         goodsId: item.goodsId,
         goodsName: item.goodsName,
         oriPrice: item.oriPrice,

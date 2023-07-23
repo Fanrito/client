@@ -1,7 +1,13 @@
 <template>
   <div class="goods-content">
-    <GoodLongCard v-for="(item, index) in BoughtGoodsList" :key="index" :publish-time="item.releaseTime" :img-src="item.imgSrc" :title="item.goodsName + item.goodsProfile" :curPrice="item.curPrice" :oriPrice="item.oriPrice" :link-href="item.linkHref" :category="item.goodsCategoryName" class="item">
-    </GoodLongCard>
+    <n-card v-for="(item, index) in BoughtGoodsList" hoverable :key="index" title="">
+      <div>订单号：{{ item.goodsId }}</div>
+      <div>卖家：{{ item.sellerName }}</div>
+      <div>订单总价： {{ item.orderSumPrice }}</div>
+      <div>订单数量： {{ item.orderNum }}</div>
+      <div>订单状态：{{ item.orderStatus }}</div>
+      <div>订单时间：{{ item.orderDateTime.split('T')[0] + ' ' + item.orderDateTime.split('T')[1] }}</div>
+    </n-card>
   </div>
 </template>
 
@@ -19,16 +25,15 @@ const userStore = UserStore()
 
 let BoughtGoodsList = ref([
   {
-    imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
-    goodsId: 0,
-    goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    oriPrice: 2000,
-    curPrice: 1200,
-    goodsCategoryName: '电子产品',
-    releaseTime: '2023-07-17',
-    inventory: 1,
-    goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/seller_detail/goods?goodsId=0`
+    orderId: 1,
+    buyerId: '333',
+    sellerId: '22',
+    sellerName: '张三',
+    goodsId: '12',
+    orderNum: '3',
+    orderSumPrice: '30',
+    orderStatus: '已完成',
+    orderDateTime: '2022-09-01T23:06:29'
   }
 ])
 
@@ -42,23 +47,7 @@ const loadPublishedGoods = async () => {
   console.log(res)
   if (res.data.code == 1) {
     const id = userStore.id
-    res.data.data.map(item => {
-      if (item.buyerId == id) {
-        let goodsInfo = {
-          imgSrc: item.goodsImage,
-          goodsId: item.goodsId,
-          goodsName: item.goodsName,
-          oriPrice: item.oriPrice,
-          curPrice: item.curPrice,
-          goodsCategoryName: item.goodsCategoryName,
-          releaseTime: item.releaseTime,
-          inventory: item.inventory,
-          goodsProfile: item.goodsProfile,
-          linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
-        }
-        BoughtGoodsList.value.push(goodsInfo)
-      }
-    })
+    BoughtGoodsList.value = res.data.data
   }
 }
 </script>

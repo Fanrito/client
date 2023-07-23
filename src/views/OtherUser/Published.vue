@@ -14,6 +14,7 @@ const route = useRoute()
 
 const axios = inject('axios')
 const message = inject('message')
+const userId = inject('userId')
 const userStore = UserStore()
 
 let publishedGoodsList = ref([
@@ -36,7 +37,7 @@ onMounted(() => {
 })
 
 const loadPublishedGoods = async () => {
-  let res = await axios.get(`user/goods`)
+  let res = await axios.get(`other/goods/${userId}`)
   console.log(res)
   if (res.data.code == 1) {
     res.data.data.map(item => {

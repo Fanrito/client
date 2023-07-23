@@ -80,7 +80,7 @@ const router = createRouter({
       component: () => import('../views/User/ChangeInfo.vue'),
     },
     {
-      path: '/detail',
+      path: '/detail/:goodsId',
       name: 'detail',
       component: () => import('../views/Detail/Detail.vue'),
     },

@@ -20,7 +20,7 @@ const axios = inject('axios')
 const goodsList = ref([
   {
     imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
-    goodsId: 0,
+    goodsId: 1,
     goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
     oriPrice: 2000,
     curPrice: 1200,
@@ -28,7 +28,7 @@ const goodsList = ref([
     releaseTime: '2023-07-17',
     inventory: 1,
     goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/seller_detail/goods?goodsId=0`
+    linkHref: `/detail/1`
   }
 ])
 const page = ref(0)
@@ -66,7 +66,7 @@ const loadGoods = async () => {
         releaseTime: item.releaseTime,
         inventory: item.inventory,
         goodsProfile: item.goodsProfile,
-        linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
+        linkHref: `/detail/${item.goodsId}`
       }
       goodsList.value.push(goodsInfo)
     })

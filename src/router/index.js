@@ -91,7 +91,12 @@ const router = createRouter({
     {
       path:'/editPhoto',
       component:()=>import('../views/Detail/editPhoto.vue')
-    }
+    },
+    {
+      path: '/release',
+      name: 'release',
+      component: () => import('../views/Release/Release.vue'),
+    },
   ]
 })
 

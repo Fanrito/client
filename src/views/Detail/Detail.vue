@@ -62,7 +62,6 @@
         </n-layout-footer>
       </n-layout>
     </n-layout>
-
     <!-- 下面的评价信息 -->
     <n-layout>
       <n-divider />

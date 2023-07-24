@@ -48,7 +48,6 @@ export default defineComponent({
   }
 })
 </script>
-
 <style scoped>
 .carousel-img {
   width: 100%;

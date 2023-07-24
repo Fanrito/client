@@ -86,7 +86,7 @@
   </style>
   
   <script setup>
-  import TopUI from './TopUI.vue';
+  import TopUI from '../Index/TopNav.vue';
   import ImageShow from './ImageShow.vue';
   import { useRouter } from 'vue-router'
   const router = useRouter();

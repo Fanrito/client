@@ -93,7 +93,7 @@ let end_time=ref()
 let buyer_name=ref("")
 let seller_name=ref("")
 let goods_name=ref("")
-const orders=ref([{orderId:1}])//定义一个接收结果的数组
+let orders=ref([{orderId:1}])//定义一个接收结果的数组
 let ordersNum=ref(0)//记录数
 //挂载后调用
 onMounted(async () => {

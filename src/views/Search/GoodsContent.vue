@@ -9,27 +9,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, inject } from 'vue'
+import { ref, reactive, onMounted, computed, inject, watch } from 'vue'
 import GoodCard from '../../components/GoodCard.vue'
 import SideNav from './SideNav.vue'
-
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
 const axios = inject('axios')
 
+const goodsTypes = ['数码', '文具', '图书', '服装', '医疗', '食品', '娱乐', '美妆', '代步', '生活', '虚拟', '其他']
+
 // 商品信息数组，需要渲染到页面上
-const goodsList = ref([
-  {
-    imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
-    goodsId: 0,
-    goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    oriPrice: 2000,
-    curPrice: 1200,
-    goodsCategoryName: '电子产品',
-    releaseTime: '2023-07-17',
-    inventory: 1,
-    goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/seller_detail/goods?goodsId=0`
-  }
-])
+const goodsList = ref([])
 const page = ref(0)
 
 const scrollTop = ref(0)
@@ -43,21 +34,30 @@ onMounted(() => {
   loadGoods()
 })
 
+// 监听 $route 对象的 params 属性
+watch(
+  () => route.query,
+  (newQuery, oldQuery) => {
+    // 在参数发生变化时执行回调函数
+    window.location.reload()
+  }
+)
+
 // 从后端获取商品信息
 const loadGoods = async () => {
-  let res = await axios.get(`/goods/all`, {
+  let res = await axios.post(`/goods/all`, {
     page: page.value,
-    pageSize: 1
-  })
-  console.log({
-    page: page.value,
-    pageSize: 1
+    pageSize: 4,
+    goodsName: route.query.goodsName,
+    goodsCategoryName: goodsTypes[route.query.goodsCategoryId]
   })
   console.log(res)
   if (res.data.code == 1) {
-    res.data.data.map(item => {
+    res.data.data.rows.map(item => {
+      const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+      const goodsPhotosArray = JSON.parse(goodsPhotosString)
       let goodsInfo = {
-        imgSrc: item.goodsImage,
+        imgSrc: goodsPhotosArray[0],
         goodsId: item.goodsId,
         goodsName: item.goodsName,
         oriPrice: item.oriPrice == null ? '' : item.oriPrice,
@@ -66,7 +66,7 @@ const loadGoods = async () => {
         releaseTime: item.releaseTime,
         inventory: item.inventory,
         goodsProfile: item.goodsProfile,
-        linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
+        linkHref: `/detail/${item.goodsId}`
       }
       goodsList.value.push(goodsInfo)
     })

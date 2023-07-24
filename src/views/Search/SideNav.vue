@@ -1,6 +1,6 @@
 <template>
   <div class="side-navigation">
-    <n-menu :options="menuOptions"/>
+    <n-menu :options="menuOptions" />
   </div>
 </template>
 
@@ -21,11 +21,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: '/search?id=1',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 0
+            }
+          }
         },
         goodsTypes[0]
       ),
@@ -35,11 +38,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: '/search?id=1',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 1
+            }
+          }
         },
         goodsTypes[1]
       ),
@@ -49,11 +55,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 2
+            }
+          }
         },
         goodsTypes[2]
       ),
@@ -63,11 +72,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 3
+            }
+          }
         },
         goodsTypes[3]
       ),
@@ -77,11 +89,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 4
+            }
+          }
         },
         goodsTypes[4]
       ),
@@ -91,11 +106,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 5
+            }
+          }
         },
         goodsTypes[5]
       ),
@@ -105,11 +123,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 6
+            }
+          }
         },
         goodsTypes[6]
       ),
@@ -119,11 +140,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 7
+            }
+          }
         },
         goodsTypes[7]
       ),
@@ -133,11 +157,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 8
+            }
+          }
         },
         goodsTypes[8]
       ),
@@ -147,11 +174,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 9
+            }
+          }
         },
         goodsTypes[9]
       ),
@@ -161,11 +191,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 10
+            }
+          }
         },
         goodsTypes[10]
       ),
@@ -175,11 +208,14 @@ const menuOptions = [
   {
     label: () =>
       h(
-        'a',
+        RouterLink,
         {
-          href: 'https://baike.baidu.com/item/%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F',
-          target: '_blank',
-          rel: 'noopenner noreferrer'
+          to: {
+            name: 'search',
+            query: {
+              goodsCategoryId: 11
+            }
+          }
         },
         goodsTypes[11]
       ),
@@ -188,6 +224,7 @@ const menuOptions = [
   }
 ]
 </script>
+
 <style scoped>
 .side-navigation {
   width: 140px;

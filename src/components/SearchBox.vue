@@ -5,7 +5,9 @@
         <n-icon :component="FlashOutline" />
       </template>
     </n-input>
-    <n-button type="primary" @click="callSearch()" style="" size="large"> 搜索 </n-button>
+    <router-link tag="a" target="_blank" v-slot="{ navigate }" :to="{ path: '/search', query: { goodsName: content } }">
+      <n-button @click="navigate" type="primary" style="" size="large"> 搜索 </n-button>
+    </router-link>
   </div>
 </template>
 
@@ -14,9 +16,6 @@ import { FlashOutline } from '@vicons/ionicons5'
 import { defineProps, ref } from 'vue'
 const props = defineProps(['searchTip', 'search'])
 let content = ref('')
-const callSearch = () => {
-  props.search(content)
-}
 </script>
 
 <style scoped>

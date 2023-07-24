@@ -1,12 +1,14 @@
 <!-- 首页顶部导航栏 -->
 <template>
   <div class="top">
-    <div class="brand">
-      <img src="../../static/img/favicon-32x32.png" alt="" />
-      <span class="brand-text">厦小鱼二手交易网</span>
-    </div>
+    <router-link to="/">
+      <div class="brand">
+        <img src="../../static/img/favicon-32x32.png" alt="" />
+        <span class="brand-text">厦小鱼二手交易网</span>
+      </div>
+    </router-link>
     <div class="search-box">
-      <SearchBox searchTip="搜索你想要的商品" :search="search"></SearchBox>
+      <SearchBox searchTip="搜索你想要的商品"></SearchBox>
     </div>
     <div class="topnav">
       <n-menu v-model:value="activeKey" mode="horizontal" :options="menuOptions" />
@@ -59,11 +61,6 @@ const menuOptions = [
     icon: renderIcon(BookIcon)
   }
 ]
-
-const search = key => {
-  console.log(key)
-  push('/seach')
-}
 </script>
 
 <style scoped>

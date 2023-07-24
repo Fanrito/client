@@ -125,6 +125,7 @@ const sideNavLeft = computed(() => {
   font-weight: 700;
   font-size: 24px;
   color: #333;
+  background-color: #f6f6f6;
   span {
     display: inline-block;
   }
@@ -139,6 +140,7 @@ const sideNavLeft = computed(() => {
   flex-wrap: wrap;
   width: 990px;
   justify-content: space-around;
+  background-color: #f6f6f6;
   transition: background box-shadow 0.3s ease;
 
   .item {

@@ -1,13 +1,20 @@
 <template>
   <div class="goods-content">
-    <n-card v-for="(item, index) in BoughtGoodsList" hoverable :key="index" title="">
-      <div>订单号：{{ item.goodsId }}</div>
-      <div>卖家：{{ item.sellerName }}</div>
-      <div>订单总价： {{ item.orderSumPrice }}</div>
-      <div>订单数量： {{ item.orderNum }}</div>
-      <div>订单状态：{{ item.orderStatus }}</div>
-      <div>订单时间：{{ item.orderDateTime.split('T')[0] + ' ' + item.orderDateTime.split('T')[1] }}</div>
-    </n-card>
+    <OrderCard
+      class="item"
+      v-for="(item, index) in SoldGoodsList"
+      hoverable
+      :key="index"
+      :status="item.orderStatus"
+      :order-time="item.orderDateTime"
+      :num="item.orderNum"
+      :title="item.goodsName"
+      :buyer="item.buyerName"
+      :seller="item.sellerName"
+      :img-src="item.goodsPhotos"
+      :linkHref="item.linkHref"
+      :total-price="item.orderSumPrice"
+    ></OrderCard>
   </div>
 </template>
 
@@ -15,7 +22,7 @@
 import { ref, reactive, inject, onMounted } from 'vue'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
-import GoodLongCard from '../../components/GoodLongCard.vue'
+import OrderCard from '../../components/OrderCard.vue'
 const router = useRouter()
 const route = useRoute()
 
@@ -23,31 +30,29 @@ const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()
 
-let BoughtGoodsList = ref([
-  {
-    orderId: 1,
-    buyerId: '333',
-    sellerId: '22',
-    sellerName: '张三',
-    goodsId: '12',
-    orderNum: '3',
-    orderSumPrice: '30',
-    orderStatus: '已完成',
-    orderDateTime: '2022-09-01T23:06:29'
-  }
-])
+let SoldGoodsList = ref([])
 
 onMounted(() => {
-  loadPublishedGoods()
+  loadSoldGoods()
 })
 
 // 待修改
-const loadPublishedGoods = async () => {
+const loadSoldGoods = async () => {
   let res = await axios.get(`user/order`)
   console.log(res)
   if (res.data.code == 1) {
     const id = userStore.id
-    BoughtGoodsList.value = res.data.data
+    res.data.data.map(item => {
+      if (item.buyerId == id) {
+        const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+        const goodsPhotosArray = JSON.parse(goodsPhotosString)
+        item.goodsPhotos = goodsPhotosArray[0]
+        item.orderDateTime = item.orderDateTime.toString().split('T').join(' ')
+        item.linkHref = `/detail?goodsId=${item.goodsId}`
+        SoldGoodsList.value.push(item)
+      }
+    })
+    console.log(SoldGoodsList)
   }
 }
 </script>

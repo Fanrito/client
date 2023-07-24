@@ -3,7 +3,7 @@
     <n-card v-for="(item, index) in commentsList" hoverable :key="index" title="好评">
       <template #header-extra>
         <span>{{ item.buyerName }}</span>
-        <img :src="item.buyerImg" alt="" style="display: inline-block; width: 30px; height: 30px; margin: 0 10px; border-radius: 90%" />
+        <img :src="item.buyerPhoto" alt="" style="display: inline-block; width: 30px; height: 30px; margin: 0 10px; border-radius: 90%" />
       </template>
       {{ item.userCommentContent }}
     </n-card>
@@ -22,7 +22,7 @@ const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()
 
-let commentsList = reactive([
+let commentsList = ref([
   {
     userCommentId: '1',
     buyerId: '3',
@@ -44,9 +44,9 @@ onMounted(() => {
 })
 
 const getComments = async () => {
-  let res = await axios.get(`user/comment/1`)
-  console.log()
-  commentsList = res.data.data
+  let res = await axios.get(`user/comment`)
+  console.log(res)
+  commentsList.value = res.data.data
 }
 </script>
 

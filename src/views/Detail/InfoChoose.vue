@@ -1,20 +1,8 @@
 <template>
-  <n-space vertical>
-    <!-- 商品种类选择 -->
-    选择商品种类
-    <n-space vertical>
-      <n-radio-group v-model:value="kind_value" name="radiobuttongroup1">
-        <n-radio-button v-for="song in kinds_nums" :key="song.value" :value="song.value" :label="song.label" />
-      </n-radio-group> </n-space
-    ><br />
-    <!-- 地址选择框 -->
-    选择地址
-    <n-select v-model:value="address_value" :options="address_options" /><br />
-  </n-space>
   选择商品数量
   <n-space horizon align="center">
     <!-- 添加商品数量 -->
-    <n-input-number min="0" v-model:value="select_count" clearable />
+    <n-input-number min="1" :max="max + 1" v-model:value="select_count" clearable />
     <!-- 加入购物车按钮 -->
     <n-dialog-provider>
       <n-button @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
@@ -25,9 +13,16 @@
 </template>
 
 <script setup>
-import { ref, defineComponent, inject } from 'vue'
+import { ref, defineComponent, inject, defineProps } from 'vue'
 import { useMessage, useDialog } from 'naive-ui'
 import axios from 'axios'
+import { useRouter, useRoute } from 'vue-router'
+import { UserStore } from '../../stores/UserStore.js'
+const userStore = UserStore()
+const router = useRouter()
+const route = useRoute()
+
+const props = defineProps(['max'])
 
 // 注入商品id
 const goodsId = inject('goodsId')
@@ -45,11 +40,16 @@ const BuyNow = () => {
     negativeText: '取消',
     onPositiveClick: async () => {
       try {
-        const response = await axios.put(`goods/purchase?goodsId=${goodsId}&orderNum=${select_count.value}`)
+        const response = await axios.post(`goods/purchase?goodsId=${goodsId}&orderNum=${select_count.value}`)
         if (response.data.code === 1) {
           message.success('下单成功！')
+          router.push('/user/bought')
         } else {
           message.error('下单失败！')
+          if (response.data.msg == 'NOT_LOGIN') {
+            message.info('请先登录')
+            router.push('/login')
+          }
         }
       } catch (error) {
         console.error(error)
@@ -74,6 +74,10 @@ const AddToCarConfirm = () => {
           message.success('已将物品加入购物车')
         } else {
           message.error('加购失败！')
+          if (response.data.msg == 'NOT_LOGIN') {
+            message.info('请先登录')
+            router.push('/login')
+          }
         }
       } catch (error) {
         console.error(error)
@@ -84,22 +88,4 @@ const AddToCarConfirm = () => {
     }
   })
 }
-
-const address_value = ref('请选择你的地址')
-const address_options = [
-  { label: '翔安芙蓉', value: 'marina bay sands' },
-  { label: '翔安国光', value: "brown's hotel, london" },
-  { label: '翔安映雪', value: 'atlantis nahamas, nassau' }
-]
-
-const kind_value = ref(null)
-const kinds_nums = [
-  { value: '1', label: '种类1' },
-  { value: '2', label: '种类2' },
-  { value: '3', label: '种类3' },
-  { value: '4', label: '种类4' }
-].map(s => {
-  s.value = s.value.toLowerCase()
-  return s
-})
 </script>

@@ -65,7 +65,7 @@ let user = reactive({
 let rules = {
   username: [
     { required: true, message: '请输入账号', trigger: 'blur' },
-    { min: 3, max: 12, message: '账号长度在3到12个字符', trigger: 'blur' }
+    { min: 2, max: 12, message: '账号长度在2到12个字符', trigger: 'blur' }
   ],
   password: [
     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -148,8 +148,8 @@ const login2 = async () => {
     message.error('请输入验证码！')
   } else {
     let result = await axios.post('/valid', {
-      email: user.email,
-      phone: user.phone,
+      email: user.email == '' ? null : user.email,
+      phone: user.phone == '' ? null : user.email,
       valid: user.veriCode
     })
     if (result.data.code == 1) {

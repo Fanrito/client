@@ -6,12 +6,15 @@
       <div class="m-user">
         <div class="avator" @mouseover=";(showOverlay = true), setOverlayOpacity(true)" @mouseleave=";(showOverlay = false), setOverlayOpacity(false)">
           <img :src="user.userPhoto" alt="" />
-          <n-upload :default-upload="false" @change="handleFinish">
+          <n-upload :default-upload="false" @change="handleFinish" accept="image/png, image/jpeg">
             <div class="overlay" v-if="showOverlay">上传头像</div>
           </n-upload>
         </div>
         <div class="usernickname">
           <span>{{ user.userNickname }}</span>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: 20px">
+          <n-button @click="publish" style="display: inline-block; color: #f1f3ef">发布商品</n-button>
         </div>
       </div>
       <div class="mt">
@@ -37,33 +40,13 @@ import TopNav from './TopNav.vue'
 import OtherInfo from './OtherInfo.vue'
 import Footer from '../../components/Footer.vue'
 import { NIcon, useMessage } from 'naive-ui'
-
+import { useRouter, useRoute } from 'vue-router'
+import { UserStore } from '../../stores/UserStore.js'
+const userStore = UserStore()
+const router = useRouter()
+const route = useRoute()
 const axios = inject('axios')
 const message = useMessage()
-
-const handleFinish = ({ file, event }) => {
-  const ext = file.name.split('.')[1]
-  file.name = `${user.userId}_avator.${ext}`
-  const config = {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  }
-  let res = axios.post(
-    '/upload/Imgs',
-    {
-      image: [file]
-    },
-    config
-  )
-  console.log(res)
-  if (res.data.code == 1) {
-    message.success('图片上传成功')
-    user.userPhoto = res.data.data
-    uploadAvator()
-  } else {
-    message.info('图片上传失败')
-  }
-  return file
-}
 
 const user = reactive({
   userCampus: null,
@@ -79,41 +62,96 @@ const user = reactive({
   userStatus: null
 })
 
-const showOverlay = ref(false)
-const setOverlayOpacity = visible => {
-  const overlay = document.querySelector('.overlay')
-  if (overlay) {
-    overlay.style.opacity = visible ? '1' : '0'
-  }
-}
-
 onMounted(() => {
   loadUser()
 })
 
+// 加载用户信息
 const loadUser = async () => {
   let res = await axios.get('/user')
+  console.log(res)
+  if (res.data.msg == 'NOT_LOGIN') {
+    message.info('请先登录')
+    router.push('/login')
+    return
+  }
+  userStore.id = res.data.data.userId
   Object.assign(user, res.data.data)
 }
 
-const uploadAvator = async () => {
-  const param = {
-    userId: user.userId,
-    userPhoto: user.userPhoto
+// 第一次上传图片，获取图片的云路径
+const handleFinish = async ({ file, event }) => {
+  const ext = file.name.split('.')[1]
+  file.name = `${user.userId}_avator.${ext}`
+  var data = new FormData()
+  data.append('photos', file.file)
+  var config = {
+    method: 'post',
+    url: '/upload/Imgs',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    data: data
   }
-  axios
-    .patch('/user/update', param)
+  let res = await axios(config)
+  if (res.data.code == 1) {
+    message.success('图片上传成功')
+    user.userPhoto = res.data.data
+    uploadAvator()
+  } else {
+    message.error('图片上传失败')
+    if (rea.data.msg == 'NOT_LOGIN') {
+      message.info('请先登录')
+      router.push('/login')
+    }
+  }
+  return file
+}
+
+// 第二次图片上传，像后端发送用户id和图片路径
+const uploadAvator = async () => {
+  var data = JSON.stringify({
+    userId: user.userId,
+    userPhoto: user.userPhoto[0]
+  })
+
+  var config = {
+    method: 'patch',
+    url: 'http://127.0.0.1:8080/user/update',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    data: data
+  }
+
+  axios(config)
     .then(response => {
       if (response.code == 1) {
-        message.info('提交成功')
+        message.success('提交成功')
       } else if (response.code == 0) {
-        message.info('提交失败')
+        message.error('提交失败')
+        if (rea.data.msg == 'NOT_LOGIN') {
+          message.info('请先登录')
+          router.push('/login')
+        }
       }
     })
     .catch(error => {
       console.error('Error updating user information:', error)
       message.error('网络异常')
     })
+}
+
+// 跳转到发布页
+const publish = () => {
+  router.push('/release')
+}
+
+// 上传头像的动画
+const showOverlay = ref(false)
+const setOverlayOpacity = visible => {
+  const overlay = document.querySelector('.overlay')
+  if (overlay) {
+    overlay.style.opacity = visible ? '1' : '0'
+  }
 }
 </script>
 
@@ -141,7 +179,7 @@ const uploadAvator = async () => {
       position: relative;
       width: 72px;
       height: 72px;
-      margin: 30px auto;
+      margin: 25px auto;
       border-radius: 100%;
       border: 4px solid #fff;
       -webkit-box-shadow: 3px 2px 10px 0 rgba(1, 79, 4, 0.84);

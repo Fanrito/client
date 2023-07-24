@@ -17,21 +17,8 @@ import SideNav from './SideNav.vue'
 const axios = inject('axios')
 
 // 商品信息数组，需要渲染到页面上
-const goodsList = ref([
-  {
-    imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
-    goodsId: 1,
-    goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    oriPrice: 2000,
-    curPrice: 1200,
-    goodsCategoryName: '电子产品',
-    releaseTime: '2023-07-17',
-    inventory: 1,
-    goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/detail/1`
-  }
-])
-const page = ref(0)
+const goodsList = ref([])
+const page = ref(1)
 
 const scrollTop = ref(0)
 const goodsContentOffset = ref(0)
@@ -46,18 +33,17 @@ onMounted(() => {
 
 // 从后端获取商品信息
 const loadGoods = async () => {
-  const body = {
+  let res = await axios.post(`/goods/all`, {
     page: page.value,
-    pageSize: 1
-  }
-  let res = await axios.get(`/goods/all`, {
-    data: {}
+    pageSize: 4
   })
   console.log(res)
   if (res.data.code == 1) {
-    res.data.data.map(item => {
+    res.data.data.rows.map(item => {
+      const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+      const goodsPhotosArray = JSON.parse(goodsPhotosString)
       let goodsInfo = {
-        imgSrc: item.goodsImage,
+        imgSrc: goodsPhotosArray[0],
         goodsId: item.goodsId,
         goodsName: item.goodsName,
         oriPrice: item.oriPrice == null ? '' : item.oriPrice,
@@ -105,7 +91,8 @@ const observeScroll = () => {
 const { scrollObserver } = observeScroll()
 
 const fetchMoreProducts = async () => {
-  page.value++
+  page.value += 1
+  console.log(page.value)
   loadGoods()
 }
 

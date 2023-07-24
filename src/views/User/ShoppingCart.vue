@@ -60,21 +60,16 @@
 
 <script setup>
 import { ref, reactive, inject, onMounted } from 'vue'
-import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
-import naive from 'naive-ui/es/preset'
 import { useMessage } from 'naive-ui'
-import { getShoppingCart } from '@/api.js'
 const axios = inject('axios')
 const message = useMessage()
 const router = useRouter()
 var allItemsSelected = ref(0)
-var aLLselect = ref(0)
 
 const cartItemCount = ref(0) //已选商品数量
 const selectedAmount = ref(0) //已选商品金额
 const pagesize = ref(10) //页面大小
-var cur_page = ref(1) //当前页面
 const userId = ref(1)
 // var goods=ref([])
 // 获得购物车信息

@@ -89,6 +89,8 @@
 import { ref, computed, onMounted, inject, reactive } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import swal from 'sweetalert' // 导入 SweetAlert 库
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const axios = inject('axios')
 // 模拟用户数据
 FlashOutline

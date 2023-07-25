@@ -67,6 +67,8 @@ import { UserStore } from '../../stores/UserStore'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 
 // 表单
 const formRef = ref(null)
@@ -103,7 +105,7 @@ const rules = {
   goodsCategoryName: { required: true, trigger: ['blur', 'change'], message: '请选择商品的种类' },
   oriPrice: { type: 'number', required: false, trigger: ['blur', 'change'], message: '请输入商品原价' },
   curPrice: { type: 'number', required: true, trigger: ['blur', 'change'], message: '请输入商品价格' },
-  inventory: { type: 'number', required: true, trigger: ['blur', 'change'], message: '请输入对应的数量' },
+  inventory: { type: 'number', required: true, trigger: ['blur', 'change'], message: '请输入对应的数量' }
 }
 
 const uploadPhotos = async () => {
@@ -117,12 +119,13 @@ const uploadPhotos = async () => {
     headers: { 'Content-Type': 'multipart/form-data' },
     data: data
   }
+  loadingBar.start()
   let res = await axios(config)
-  console.log(res);
+  console.log(res)
   if (res.data.code == 1) {
     message.success('图片上传成功')
     goodsInfo.goodsPhotos = JSON.stringify(res.data.data)
-    console.log(goodsInfo.goodsPhotos);
+    console.log(goodsInfo.goodsPhotos)
     upload()
   } else {
     message.error('图片上传失败')
@@ -134,7 +137,6 @@ const uploadPhotos = async () => {
 }
 
 const upload = async () => {
-  loadingBar.start()
   let result = await axios.put('/user/release', goodsInfo)
   console.log(result)
   if (result.data.code == 1) {

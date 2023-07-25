@@ -42,6 +42,8 @@ import Footer from '../../components/Footer.vue'
 import { NIcon, useMessage } from 'naive-ui'
 import { useRouter, useRoute } from 'vue-router'
 import { UserStore } from '../../stores/UserStore.js'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const userStore = UserStore()
 const router = useRouter()
 const route = useRoute()
@@ -93,6 +95,7 @@ const handleFinish = async ({ file, event }) => {
     headers: { 'Content-Type': 'multipart/form-data' },
     data: data
   }
+  loadingBar.start()
   let res = await axios(config)
   if (res.data.code == 1) {
     message.success('图片上传成功')
@@ -127,6 +130,7 @@ const uploadAvator = async () => {
   axios(config)
     .then(response => {
       if (response.code == 1) {
+        loadingBar.finish()
         message.success('提交成功')
       } else if (response.code == 0) {
         message.error('提交失败')

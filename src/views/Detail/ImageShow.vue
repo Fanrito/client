@@ -25,6 +25,8 @@
 <script>
 import { ArrowBack, ArrowForward } from '@vicons/ionicons5'
 import { defineComponent } from 'vue'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 
 export default defineComponent({
   components: {
@@ -46,7 +48,6 @@ export default defineComponent({
 <style scoped>
 .carousel-img {
   width: 100%;
-  height: 240px;
   object-fit: cover;
 }
 

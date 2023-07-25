@@ -7,6 +7,8 @@ const route = useRoute()
 const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 // import Steps from './Steps.vue';
 import Form from './Form.vue'
 

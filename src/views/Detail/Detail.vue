@@ -13,7 +13,7 @@
       <n-layout has-sider>
         <!-- 左边图片布局 -->
         <n-layout-sider :native-scrollbar="false" width="300px" bordered>
-          <image-show :imageUrls="res.goodsPhotos"></image-show>
+          <image-show style="border: 1 solid #fff; border-radius: 20px 0 0 0;" :imageUrls="res.goodsPhotos"></image-show>
           <n-layout-content content-style="padding: 24px;">
             <div align="left">
               <font color="grey">发布时间 {{ res.releaseTime }}</font>

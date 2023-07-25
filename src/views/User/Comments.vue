@@ -15,6 +15,8 @@ import { ref, reactive, inject, onMounted } from 'vue'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
 import GoodLongCard from '../../components/GoodLongCard.vue'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const router = useRouter()
 const route = useRoute()
 

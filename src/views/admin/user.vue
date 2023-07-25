@@ -93,6 +93,8 @@ import { FlashOutline } from '@vicons/ionicons5'
 import { CashOutline } from '@vicons/ionicons5'
 import { inject, onMounted } from 'vue'
 const axios = inject('axios')
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 FlashOutline
 CashOutline
 import swal from 'sweetalert' // 导入 SweetAlert 库 负责删除/重置警告

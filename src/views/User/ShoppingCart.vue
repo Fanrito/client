@@ -35,7 +35,7 @@
       <div class="content" :href="linkHref" target="_blank">
         <n-checkbox v-model:checked="item.isSelected" class="number" @click="selectGoods(item.goodsId)"> 选中 </n-checkbox>
         <div style="height: 110px; width: 110px">
-          <a :href="item.linkHref"> <img :src="item.goodsPhoto" alt="" /></a>
+          <a :href="item.linkHref"> <img :src="item.goodsPhotos" alt="" /></a>
         </div>
 
         <div class="title-content">
@@ -64,6 +64,8 @@ import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
 import naive from 'naive-ui/es/preset'
 import { useMessage } from 'naive-ui'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const axios = inject('axios')
 const message = useMessage()
 const router = useRouter()
@@ -92,9 +94,9 @@ const search = async () => {
     console.log(data)
     const modifiedData = data.map(item => {
       // 在这里对每个对象进行修改，并添加属性
-      const goodsPhotosString = item.goodsPhoto.replace(/\\/g, '')
+      const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
       const goodsPhotosArray = JSON.parse(goodsPhotosString)
-      item.goodsPhoto = goodsPhotosArray[0]
+      item.goodsPhotos = goodsPhotosArray[0]
       return {
         ...item,
         isSelected: false, // 替换为你想要添加的属性和值
@@ -235,9 +237,11 @@ const buyAllGoods = async () => {
     console.log(response.data)
     // 进行后续操作，如展示成功提示等
     loadingBar.finish()
+    message.success('结算成功')
   } catch (error) {
     // 处理错误情况
     loadingBar.error()
+    message.error('结算失败')
     console.log(error)
     // 进行错误处理，如展示错误提示等
   }

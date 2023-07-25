@@ -50,6 +50,8 @@ import { useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 import { defineComponent, ref, inject } from 'vue'
 import { NSpace, NInput, NButton } from 'naive-ui'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 export default defineComponent({
   setup() {
     const axios = inject('axios')
@@ -95,7 +97,7 @@ export default defineComponent({
       }
     }
     const confirm = async () => {
-      loadingBar.start()
+      // loadingBar.start()
 
       console.log(name.value)
       //保存用户信息的逻辑
@@ -117,7 +119,7 @@ export default defineComponent({
           userNickname: nick_name.value
         })
         console.log(response)
-        loadingBar.finish()
+        // loadingBar.finish()
         router.push('/admin/user')
       } else if (passwd.value == '') {
         passwordsMatch.value = 3

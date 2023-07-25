@@ -14,6 +14,8 @@ import { NIcon } from 'naive-ui'
 import { CartOutline, BagCheckOutline, LogoUsd, MailOutline, SendOutline } from '@vicons/ionicons5'
 import { RouterLink } from 'vue-router'
 import GoodCard from '../../components/GoodCard.vue'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const activeKey = ref(null)
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })

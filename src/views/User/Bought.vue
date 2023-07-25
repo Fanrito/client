@@ -23,6 +23,8 @@ import { ref, reactive, inject, onMounted } from 'vue'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
 import OrderCard from '../../components/OrderCard.vue'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const router = useRouter()
 const route = useRoute()
 
@@ -49,7 +51,7 @@ const loadSoldGoods = async () => {
         const goodsPhotosArray = JSON.parse(goodsPhotosString)
         item.goodsPhotos = goodsPhotosArray[0]
         item.orderDateTime = item.orderDateTime.toString().split('T').join(' ')
-        item.linkHref = `/detail?goodsId=${item.goodsId}`
+        item.linkHref = `/detail/${item.goodsId}`
         SoldGoodsList.value.push(item)
       }
     })

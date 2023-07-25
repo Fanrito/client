@@ -65,6 +65,8 @@ import { useMessage } from 'naive-ui'
 import axios from 'axios'
 import { UserStore } from '../../stores/UserStore'
 import { useRouter, useRoute } from 'vue-router'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const router = useRouter()
 const route = useRoute()
 

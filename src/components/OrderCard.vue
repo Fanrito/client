@@ -28,6 +28,8 @@ img {
   width: 100%;
   height: auto;
   object-fit: contain;
+  border: 1 solid #fff;
+  border-radius: 20px;
 }
 .content {
   display: flex;
@@ -48,7 +50,7 @@ img {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding-top: 20px;
+    padding: 20px;
     box-sizing: border-box;
   }
 }

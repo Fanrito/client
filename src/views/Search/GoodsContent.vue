@@ -13,6 +13,8 @@ import { ref, reactive, onMounted, computed, inject, watch } from 'vue'
 import GoodCard from '../../components/GoodCard.vue'
 import SideNav from './SideNav.vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const router = useRouter()
 const route = useRoute()
 const axios = inject('axios')

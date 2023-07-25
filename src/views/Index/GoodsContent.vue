@@ -14,6 +14,7 @@ import { ref, reactive, onMounted, computed, inject } from 'vue'
 import GoodCard from '../../components/GoodCard.vue'
 import SideNav from './SideNav.vue'
 import { useLoadingBar } from 'naive-ui'
+
 const loadingBar = useLoadingBar()
 
 const axios = inject('axios')

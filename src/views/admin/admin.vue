@@ -24,6 +24,8 @@
 <script setup>    
 import { useRouter } from 'vue-router'
 const router = useRouter();
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const exit_Admin=()=>
 {
     console.log("haha")

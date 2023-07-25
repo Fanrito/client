@@ -36,6 +36,8 @@ import Footer from '../../components/Footer.vue'
 import { NIcon, useMessage } from 'naive-ui'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 
 const userStore = UserStore()
 const router = useRouter()

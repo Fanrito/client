@@ -7,6 +7,8 @@
 </template>
 
 <script setup>
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 // 轮播图url，目前暂无广告，随便放了几张图
 // 欢迎甲方投放广告
 const url = [

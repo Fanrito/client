@@ -26,10 +26,12 @@ img {
   object-fit: contain;
 }
 .content {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 0;
   width: 194px;
-  height: 278px;
+  height: 300px;
   background: #fff;
 }
 .img-content {
@@ -47,9 +49,8 @@ img {
   flex-direction: column;
   justify-content: center;
   width: 194px;
-  height: 33px;
+  height: 45px;
   font-size: 14px;
-  height: 33px;
   overflow: hidden;
   padding: 0 18px;
   text-overflow: ellipsis;
@@ -59,8 +60,8 @@ img {
 
 .price-content {
   width: 194px;
-  height: 51px;
-  line-height: 51px;
+  height: 31px;
+  line-height: 31px;
   padding: 0 18px;
   color: #f02b2b;
   font-size: 18px;

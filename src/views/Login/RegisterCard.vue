@@ -30,6 +30,8 @@
 import { ref, reactive, inject } from 'vue'
 import { UserStore } from '../../stores/UserStore.js'
 import { useRouter, useRoute } from 'vue-router'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 const router = useRouter()
 const route = useRoute()
 

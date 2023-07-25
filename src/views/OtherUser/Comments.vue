@@ -2,9 +2,8 @@
   <div class="comments">
     <n-card v-for="(item, index) in commentsList" hoverable :key="index" title="好评">
       <template #header-extra>
-          <span>{{ item.buyerName }}</span>
-          <img :src="item.buyerImg" alt="" 
-            style="display: inline-block;width: 30px; height: 30px;margin: 0 10px;border-radius: 90%;" />
+        <span>{{ item.buyerName }}</span>
+        <img :src="item.buyerPhoto" alt="" style="display: inline-block; width: 30px; height: 30px; margin: 0 10px; border-radius: 90%" />
       </template>
       {{ item.userCommentContent }}
     </n-card>
@@ -21,26 +20,10 @@ const route = useRoute()
 
 const axios = inject('axios')
 const message = inject('message')
+const userStore = UserStore()
 const userId = inject('userId')
 
-const userStore = UserStore()
-
-const commentsList = reactive([
-  {
-    userCommentId: '1',
-    buyerId: '3',
-    buyerName: '李四',
-    userCommentContent: '商家商品质量好，服务态度好，回消息快',
-    buyerImg: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg'
-  },
-  {
-    userCommentId: '2',
-    buyerId: '4',
-    buyerName: '李四',
-    userCommentContent: '商家商品质量好，服务态度好，回消息快',
-    buyerImg: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg'
-  }
-])
+let commentsList = ref([])
 
 onMounted(() => {
   getComments()
@@ -48,8 +31,8 @@ onMounted(() => {
 
 const getComments = async () => {
   let res = await axios.get(`user/comment/${userId}`)
-  console.log();
-  commentsList = res.data.data
+  console.log(res)
+  commentsList.value = res.data.data
 }
 </script>
 

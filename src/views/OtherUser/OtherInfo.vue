@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, inject, h } from 'vue'
+import { ref, reactive, inject, h, defineProps } from 'vue'
 
 import { NIcon } from 'naive-ui'
 import { CartOutline, BagCheckOutline, LogoUsd, MailOutline, SendOutline } from '@vicons/ionicons5'
@@ -18,6 +18,10 @@ const activeKey = ref(null)
 function renderIcon(icon) {
   return () => h(NIcon, null, { default: () => h(icon) })
 }
+
+const props = defineProps(['userId'])
+const userId = props.userId
+
 const menuOptions = [
   {
     label: () =>
@@ -25,7 +29,7 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            path: '/otherUser'
+            path: `/otherUser/${userId}`
           }
         },
         { default: () => 'ta发布的' }
@@ -39,7 +43,7 @@ const menuOptions = [
         RouterLink,
         {
           to: {
-            path: '/otherUser/comments'
+            path: `/otherUser/${userId}/comments`
           }
         },
         { default: () => 'ta的评价' }

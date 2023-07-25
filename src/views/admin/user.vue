@@ -83,12 +83,12 @@
       </tbody>
     </table>
     <br />
-    <n-pagination v-model:page="currentPage" :page-count="totalPages" @update="handlePageChange" />
+    <n-pagination v-model:page="currentPage" :page-count="totalPages" :on-update:page="handlePageChange" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed,reactive } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { CashOutline } from '@vicons/ionicons5'
 import { inject, onMounted } from 'vue'
@@ -96,6 +96,7 @@ const axios = inject('axios')
 FlashOutline
 CashOutline
 import swal from 'sweetalert' // 导入 SweetAlert 库 负责删除/重置警告
+import { SignalWifiStatusbarConnectedNoInternet4Outlined } from '@vicons/material';
 // 六个搜索框的内容
 let usernameSearch = ref(null)
 let userGender = ref(null)
@@ -103,12 +104,19 @@ let emailSearch = ref(null)
 let phoneSearch = ref(null)
 let nicknameSearch = ref(null)
 let campusSearch = ref(null)
-const currentPage = ref(1)
+var currentPage = reactive(1)
 let userCampus = ref(null)
-const pageSize = 15 // 每页显示的用户数量
+// var newPage=reactive(0)
+const pageSize = ref(15) // 每页显示的用户数量
 function handlePageChange(newPage) {
-  currentPage.value = newPage
+  console.log("进入更改页面函数")
+  console.log(newPage)
+  currentPage= newPage
+  console.log(currentPage)
+  search()
 }
+let totalItem=ref(0)
+let totalPages=ref(0)
 const options = [
   {
     label: '男',
@@ -117,42 +125,47 @@ const options = [
   {
     label: '女',
     value: 0
+  },
+  {
+    label:'不限',
+    value:null
   }
 ]
-
 const options_campus = [
   {
     label: '翔安',
-    value: 1
+    value: '翔安',
   },
   {
     label: '思明',
-    value: 2
+    value: '思明',
   },
   {
     label: '漳州',
-    value: 3
+    value: '漳州'
   },
-  { label: '马来西亚', value: 4 }
+  { label: '马来西亚', value: '马来西亚' },
+  {
+    label:'不限',value:null
+  }
 ]
 const search = async () => {
   try {
     console.log('页面用户电话')
     console.log(phoneSearch.value)
     console.log('当前页面')
-    console.log(currentPage.value)
+    console.log(currentPage)
     console.log('搜索用户名条件')
     console.log(usernameSearch.value)
-
     const response = await axios.get('admin/user', {
       params: {
-        page: currentPage.value, //当前页面
-        pageSize: 15, //一页15个数据
+        page: currentPage, //当前页面
+        pageSize: pageSize.value, //一页15个数据
         userName: usernameSearch.value,
         userPhoneNum: phoneSearch.value,
         userEmail: emailSearch.value,
         userGender: userGender.value,
-        //userCampus:campusSearch,
+        userCampus:campusSearch.value,
         //userStatus:1,
         userNickname: nicknameSearch.value
       }
@@ -163,6 +176,9 @@ const search = async () => {
     console.log('response.data.data.rows')
     console.log(data.data.rows)
     users.value = data.data.rows
+    users.value = users.value.filter(user => user.userStatus !== 0);
+    totalItem.value=data.data.total
+    totalPages.value=Math.ceil(totalItem.value/pageSize.value)
   } catch (error) {
     console.error(error)
     // 处理错误
@@ -173,9 +189,10 @@ const users = ref([{ id: 1, name: 2 }, { id: 2 }]) //定义一个接收结果的
 //挂载后调用
 console.log('users.value')
 console.log(users.value[0].id)
-
-onMounted(search)
-
+onMounted(()=>{
+  currentPage = 1; // 设置初始值为 1
+  search()
+})
 const SearchUser = () => {
   search()
 }
@@ -185,11 +202,23 @@ function editUser(userId) {
   editingRow.value = userId // 将正在编辑的行设置为当前行
 }
 const saveChanges = async () => {
+  console.log(editingRow.value)
+  const selectedItem = users.value.filter(item => (item.userId===editingRow.value))
+  const selectedItems=selectedItem[0]
+  const response=await axios.patch('/admin/update',{
+      userId:editingRow.value,
+      userEmail:selectedItems.userEmail,
+      userNickname:selectedItems.userNickname,
+      userCampus:selectedItems.userCampus,
+      userGender:selectedItems.userGender,
+      userPasswd:selectedItems.userPasswd,
+      userPhoneNum:selectedItems.userPhoneNum
+  }) 
+  console.log(response.data)
   editingRow.value = null // 保存之后将编辑状态取消
 }
-
 //删除用户
-const deleteUser = userId => {
+const deleteUser = (userId) => {
   // 处理删除逻辑
   swal({
     title: '确认删除用户？',
@@ -205,25 +234,23 @@ const deleteUser = userId => {
 }
 //删除用户
 //删除后要不要重新调用一个查询
-const delete_user = async userId => {
+const delete_user = async(userId) => {
   try {
-    const response = await axios.delete('admin/user/{ids}', {
-      params: {
-        ids: userId
+      await axios.delete(`admin/user/${userId}`).then(
+      response=>{
+          console.log(response.data)
+        }
+      )
+    }
+      catch(error)
+      {
+        console.log(error)
       }
-    })
-    // 处理响应结果
-    console.log(response.data)
-  } catch (error) {
-    // 处理请求错误
-    console.log('error:')
-    console.error(error)
-  }
+      search()
 }
-
 //重置用户
 //重置后要不要重新调用查询
-const resetUser = userId => {
+const resetUser = async(userId) => {
   // 处理编辑逻辑
   console.log(`Reset user with ID: ${userId}`)
   swal({
@@ -260,7 +287,6 @@ const reset = async userId => {
 h1 {
   margin: 0;
 }
-
 /* 表样式 */
 .user-table {
   width: 83%;
@@ -276,7 +302,6 @@ h1 {
 .user-table td:last-child {
   width: 13.9%;
 }
-
 .user-table th:not(:last-child),
 .user-table td:not(:last-child) {
   width: 12.3%;
@@ -294,7 +319,6 @@ input[type='text'] {
   flex-direction: column;
   align-items: center;
 }
-
 .search-area {
   background-color: #fcfcfc;
   padding: 20px;
@@ -306,7 +330,6 @@ input[type='text'] {
   /* border-style: dashed; */
   border: 1px;
 }
-
 .search-header {
   display: flex;
   justify-content: space-between;
@@ -314,33 +337,27 @@ input[type='text'] {
   margin-bottom: 1px;
   margin-top: 0px;
 }
-
 .filter-title {
   font-weight: bold;
   margin-top: -5px;
 }
-
 .search-content {
   display: flex;
   flex-direction: column;
 }
-
 .search-row {
   display: flex;
   margin-bottom: 10px; /* 增加搜索项之间的间隔 */
 }
-
 .search-field {
   display: flex;
   align-items: center;
   margin-bottom: 0px;
   flex-basis: 30%; /* 每个搜索项占据宽度的三分之一 */
 }
-
 .search-field span {
   margin-right: 10px; /* 增加标题和输入框之间的间隔 */
 }
-
 .n-input {
   flex-grow: 1; /* 让输入框填充剩余空间 */
 }

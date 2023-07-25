@@ -43,8 +43,8 @@ const router = createRouter({
       name: 'otherUser',
       component: () => import('../views/otherUser/User.vue'),
       children: [
-        { path: '/otherUser/comments', component: () => import('../views/OtherUser/Comments.vue') },
-        { path: '/otherUser', component: () => import('../views/OtherUser/Published.vue') },
+        { path: '/otherUser/:userId/comments', component: () => import('../views/OtherUser/Comments.vue') },
+        { path: '/otherUser/:userId', component: () => import('../views/OtherUser/Published.vue') },
       ]
     },
     {
@@ -85,12 +85,9 @@ const router = createRouter({
       component: () => import('../views/Detail/Detail.vue'),
     },
     {
-      path:'/seller_detail',
-      component:()=>import('../views/Detail/Seller_Detail.vue'),
-    },
-    {
-      path:'/editPhoto',
-      component:()=>import('../views/Detail/editPhoto.vue')
+      path: '/edit/:goodsId',
+      name: 'edit',
+      component: () => import('../views/EditGoods/Release.vue'),
     },
     {
       path: '/release',

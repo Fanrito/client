@@ -19,12 +19,13 @@
             <font color="grey">发布时间 {{ res.releaseTime }}</font>
           </div>
           <br /><br />
-          <a :href="userLink" target="_blank">
+          <!-- 发布人信息 -->
+          <router-link :to="userLink" target="_blank">
             <n-space horizon align-items="center">
               <img :src="seller.userPhoto" alt="" style="display: inline-block; width: 25px; height: 25px; border-radius: 90%" />
               <div>{{ seller.userName }}</div>
             </n-space>
-          </a>
+          </router-link>
           <n-rate readonly :default-value="3"></n-rate>
         </n-layout-content>
       </n-layout-sider>
@@ -108,7 +109,7 @@ const getSeller = async () => {
   console.log(response)
   if (response.data.code == 1) {
     seller = response.data.data
-    userLink.value = '/other/' + seller.userId
+    userLink.value = '/otherUser/' + seller.userId
   }
 }
 

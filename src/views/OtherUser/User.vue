@@ -23,7 +23,7 @@
         <div class="profile">个人简介: {{ user.userProfile }}</div>
       </div>
     </div>
-    <OtherInfo></OtherInfo>
+    <OtherInfo :userId="userId"></OtherInfo>
   </div>
   <Footer></Footer>
 </template>

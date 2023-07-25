@@ -22,22 +22,7 @@ const axios = inject('axios')
 const message = inject('message')
 const userStore = UserStore()
 
-let commentsList = ref([
-  {
-    userCommentId: '1',
-    buyerId: '3',
-    buyerName: '李四',
-    userCommentContent: '商家商品质量好，服务态度好，回消息快',
-    buyerImg: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg'
-  },
-  {
-    userCommentId: '2',
-    buyerId: '4',
-    buyerName: '李四',
-    userCommentContent: '商家商品质量好，服务态度好，回消息快',
-    buyerImg: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg'
-  }
-])
+let commentsList = ref([])
 
 onMounted(() => {
   getComments()

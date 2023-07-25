@@ -1,6 +1,18 @@
 <template>
   <div class="goods-content">
-    <GoodLongCard v-for="(item, index) in publishedGoodsList" :key="index" :publish-time="item.releaseTime" :img-src="item.imgSrc" :title="item.goodsName + item.goodsProfile" :curPrice="item.curPrice" :oriPrice="item.oriPrice" :link-href="item.linkHref" :category="item.goodsCategoryName" class="item"> </GoodLongCard>
+    <GoodLongCard
+      v-for="(item, index) in publishedGoodsList"
+      :key="index"
+      :publish-time="item.releaseTime"
+      :img-src="item.imgSrc"
+      :title="item.goodsName + item.goodsProfile"
+      :curPrice="item.curPrice"
+      :oriPrice="item.oriPrice"
+      :link-href="item.linkHref"
+      :category="item.goodsCategoryName"
+      class="item"
+    >
+    </GoodLongCard>
   </div>
 </template>
 
@@ -14,23 +26,10 @@ const route = useRoute()
 
 const axios = inject('axios')
 const message = inject('message')
-const userId = inject('userId')
 const userStore = UserStore()
+const userId = inject('userId')
 
-let publishedGoodsList = ref([
-  {
-    imgSrc: 'https://xiafish.oss-cn-hangzhou.aliyuncs.com/ee7115fb-b1b3-42ec-9801-f04c99552b97.jpg',
-    goodsId: 0,
-    goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    oriPrice: 2000,
-    curPrice: 1200,
-    goodsCategoryName: '电子产品',
-    releaseTime: '2023-07-17',
-    inventory: 1,
-    goodsProfile: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-    linkHref: `/seller_detail/goods?goodsId=0`
-  }
-])
+let publishedGoodsList = ref([])
 
 onMounted(() => {
   loadPublishedGoods()
@@ -41,17 +40,19 @@ const loadPublishedGoods = async () => {
   console.log(res)
   if (res.data.code == 1) {
     res.data.data.map(item => {
+      const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+      const goodsPhotosArray = JSON.parse(goodsPhotosString)
       let goodsInfo = {
-        imgSrc: item.goodsImage,
+        imgSrc: goodsPhotosArray[0],
         goodsId: item.goodsId,
         goodsName: item.goodsName,
         oriPrice: item.oriPrice,
         curPrice: item.curPrice,
         goodsCategoryName: item.goodsCategoryName,
-        releaseTime: item.releaseTime,
+        releaseTime: item.releaseTime.toString().split('T').join(' '),
         inventory: item.inventory,
         goodsProfile: item.goodsProfile,
-        linkHref: `/seller_detail/goods?goodsId=${item.goodsId}`
+        linkHref: `/edit/${item.goodsId}`
       }
       publishedGoodsList.value.push(goodsInfo)
     })

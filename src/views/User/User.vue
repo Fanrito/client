@@ -130,10 +130,10 @@ const uploadAvator = async () => {
 
   axios(config)
     .then(response => {
-      if (response.code == 1) {
+      if (response.data.code == 1) {
         loadingBar.finish()
         message.success('提交成功')
-      } else if (response.code == 0) {
+      } else if (response.data.code == 0) {
         loadingBar.error()
         message.error('提交失败')
         if (rea.data.msg == 'NOT_LOGIN') {

@@ -233,11 +233,17 @@ const buyAllGoods = async () => {
     // 发送POST请求到后端购买接口
     loadingBar.start()
     const response = await axios.post(`/shoppingcart/buy?shoppingCartIds=${selectedItems}`)
-    // 处理成功响应
-    console.log(response.data)
-    // 进行后续操作，如展示成功提示等
-    loadingBar.finish()
-    message.success('结算成功')
+    console.log(response);
+    if (response.data.code == 1) {
+      // 处理成功响应
+      console.log(response.data)
+      // 进行后续操作，如展示成功提示等
+      loadingBar.finish()
+      message.success('结算成功')
+    } else {
+      loadingBar.error()
+      message.error(response.data.msg)
+    }
   } catch (error) {
     // 处理错误情况
     loadingBar.error()

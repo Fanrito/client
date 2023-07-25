@@ -5,7 +5,7 @@
     <n-input-number min="0" :max="max" v-model:value="select_count" clearable />
     <!-- 加入购物车按钮 -->
     <n-dialog-provider>
-      <n-button :disabled="max == 0"  @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
+      <n-button :disabled="max == 0" @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
       <n-text>&emsp;</n-text>
       <n-button :disabled="max == 0" @click="AddToCarConfirm" type="info" icon-placement="right">加入购物车</n-button>
     </n-dialog-provider>
@@ -49,7 +49,7 @@ const BuyNow = () => {
           loadingBar.finish()
           router.push('/user/bought')
         } else {
-          message.error('下单失败！')
+          message.error(response.data.msg)
           loadingBar.error()
           if (response.data.msg == 'NOT_LOGIN') {
             message.info('请先登录')
@@ -80,7 +80,7 @@ const AddToCarConfirm = () => {
           message.success('已将物品加入购物车')
           loadingBar.finish()
         } else {
-          message.error('加购失败！')
+          message.error(response.data.msg)
           loadingBar.error()
           if (response.data.msg == 'NOT_LOGIN') {
             message.info('请先登录')

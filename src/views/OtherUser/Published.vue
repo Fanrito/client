@@ -59,8 +59,10 @@ const loadPublishedGoods = async () => {
       }
       publishedGoodsList.value.push(goodsInfo)
     })
+    loadingBar.finish()
+  } else {
+    loadingBar.error()
   }
-  loadingBar.finish()
 }
 </script>
 

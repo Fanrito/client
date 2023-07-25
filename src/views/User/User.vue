@@ -102,6 +102,7 @@ const handleFinish = async ({ file, event }) => {
     user.userPhoto = res.data.data
     uploadAvator()
   } else {
+    loadingBar.error()
     message.error('图片上传失败')
     if (rea.data.msg == 'NOT_LOGIN') {
       message.info('请先登录')
@@ -133,6 +134,7 @@ const uploadAvator = async () => {
         loadingBar.finish()
         message.success('提交成功')
       } else if (response.code == 0) {
+        loadingBar.error()
         message.error('提交失败')
         if (rea.data.msg == 'NOT_LOGIN') {
           message.info('请先登录')

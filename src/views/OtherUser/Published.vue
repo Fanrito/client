@@ -36,6 +36,7 @@ onMounted(() => {
 })
 
 const loadPublishedGoods = async () => {
+  loadingBar.start()
   let res = await axios.get(`other/goods/${userId}`)
   console.log(res)
   if (res.data.code == 1) {
@@ -57,6 +58,7 @@ const loadPublishedGoods = async () => {
       publishedGoodsList.value.push(goodsInfo)
     })
   }
+  loadingBar.finish()
 }
 </script>
 

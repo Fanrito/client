@@ -2,7 +2,7 @@
   <div style="position: relative; width: 990px; background-color: #faf9f9; border: 1px solid #faf9f9; border-radius: 20px">
     <div class="guess-your-like"><span>猜你喜欢</span><img src="../../static/img/reconmand.png" alt="" /></div>
     <div class="goods-content">
-      <GoodCard v-for="(item, index) in goodsList" :imgSrc="item.imgSrc" :title="item.goodsName + item.goodsProfile" :price="item.curPrice" :linkHref="item.linkHref" class="item" :oriPrice="item.oriPrice" :publishTime="item.releaseTime"></GoodCard>
+      <GoodCard v-for="(item, index) in goodsList" :imgSrc="item.imgSrc" :title="item.goodsName + ' ' + item.goodsProfile" :price="item.curPrice" :linkHref="item.linkHref" class="item" :oriPrice="item.oriPrice" :publishTime="item.releaseTime"></GoodCard>
     </div>
     <div ref="scrollObserver"></div>
     <SideNav :style="{ position: 'absolute', top: sideNavTop - 240 + 'px', left: sideNavLeft + 'px' }"></SideNav>
@@ -13,6 +13,8 @@
 import { ref, reactive, onMounted, computed, inject } from 'vue'
 import GoodCard from '../../components/GoodCard.vue'
 import SideNav from './SideNav.vue'
+import { useLoadingBar } from 'naive-ui'
+const loadingBar = useLoadingBar()
 
 const axios = inject('axios')
 
@@ -33,6 +35,7 @@ onMounted(() => {
 
 // 从后端获取商品信息
 const loadGoods = async () => {
+  loadingBar.start()
   let res = await axios.post(`/goods/all`, {
     page: page.value,
     pageSize: 4
@@ -56,6 +59,9 @@ const loadGoods = async () => {
       }
       goodsList.value.push(goodsInfo)
     })
+    loadingBar.finish()
+  } else {
+    loadingBar.error()
   }
 }
 

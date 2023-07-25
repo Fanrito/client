@@ -68,6 +68,7 @@ onMounted(() => {
 
 // 加载用户信息
 const loadUser = async () => {
+  loadingBar.start()
   let res = await axios.get('/user')
   console.log(res)
   if (res.data.msg == 'NOT_LOGIN') {
@@ -77,6 +78,7 @@ const loadUser = async () => {
   }
   userStore.id = res.data.data.userId
   Object.assign(user, res.data.data)
+  loadingBar.finish()
 }
 
 // 第一次上传图片，获取图片的云路径
@@ -115,7 +117,7 @@ const uploadAvator = async () => {
 
   var config = {
     method: 'patch',
-    url: 'http://127.0.0.1:8080/user/update',
+    url: '/user/update',
     headers: {
       'Content-Type': 'application/json'
     },

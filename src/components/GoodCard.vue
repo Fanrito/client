@@ -4,7 +4,7 @@
       <img :src="imgSrc" alt="" />
     </div>
     <div class="title-content">
-      {{ title }}
+      <span>{{ title }}</span>
     </div>
     <div class="price-content">
       <span style="text-decoration: line-through">{{ '￥' + oriPrice }}</span>
@@ -43,11 +43,13 @@ img {
 }
 
 .title-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 194px;
   height: 33px;
-  font-size: 12px;
+  font-size: 14px;
   height: 33px;
-  line-height: 16px;
   overflow: hidden;
   padding: 0 18px;
   text-overflow: ellipsis;

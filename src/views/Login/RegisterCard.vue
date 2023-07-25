@@ -96,6 +96,7 @@ const register = async () => {
     username: user.username,
     password: user.password
   })
+  loadingBar.start()
   let result = await axios.post('/signup', {
     username: user.username,
     password: user.password,
@@ -104,10 +105,12 @@ const register = async () => {
   })
   console.log(result)
   if (result.data.code == 1) {
+    loadingBar.finish()
     message.success('注册成功')
     userStore.token = result.data.data
     router.push('/user')
   } else {
+    loadingBar.error()
     if (result.data.msg == '插入的信息已存在') {
       message.error('用户已存在')
       return

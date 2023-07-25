@@ -134,12 +134,15 @@ const uploadPhotos = async () => {
 }
 
 const upload = async () => {
+  loadingBar.start()
   let result = await axios.put('/user/release', goodsInfo)
   console.log(result)
   if (result.data.code == 1) {
+    loadingBar.finish()
     message.success('发布成功')
     router.push('/user')
   } else {
+    loadingBar.error()
     message.error('发布失败')
   }
 }

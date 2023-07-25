@@ -90,6 +90,7 @@ const login1 = async e => {
     if (errors) {
       message.error('请正确输入用户名和密码！')
     } else {
+      loadingBar.start()
       let result = await axios.post('/login', {
         loginWay: 1,
         username: user.username,
@@ -104,6 +105,7 @@ const login1 = async e => {
           userStore.username = user.username
           userStore.password = user.password
         }
+        loadingBar.finish()
         message.success('登陆成功')
         if (user.username === 'admin') {
           router.push('/admin/user')
@@ -111,6 +113,7 @@ const login1 = async e => {
         }
         router.push('/user')
       } else {
+        loadingBar.error()
         message.error('登陆失败')
       }
     }
@@ -121,7 +124,7 @@ const login1 = async e => {
 const sendPhoneVeriCode = async () => {
   sendVeriCode()
   let result = await axios.post('/login/phone', {
-    email: user.email
+    phone: user.phone
   })
   console.log(result)
   if (result.data.code == 1) {
@@ -134,7 +137,7 @@ const sendPhoneVeriCode = async () => {
 const sendEmailVeriCode = async () => {
   sendVeriCode()
   let result = await axios.post('/login/email', {
-    phoneNum: user.phone
+    email: user.email
   })
   console.log(result)
   if (result.data.code == 1) {
@@ -147,15 +150,19 @@ const login2 = async () => {
   if (user.veriCode == '') {
     message.error('请输入验证码！')
   } else {
+    loadingBar.start()
     let result = await axios.post('/valid', {
       email: user.email == '' ? null : user.email,
-      phone: user.phone == '' ? null : user.email,
+      phone: user.phone == '' ? null : user.phone,
       valid: user.veriCode
     })
     if (result.data.code == 1) {
       userStore.token = result.data.data
+      loadingBar.finish()
       message.success('登陆成功')
+      router.push('/user')
     } else {
+      loadingBar.error()
       message.error('验证码错误')
     }
   }

@@ -45,6 +45,7 @@ watch(
 
 // 从后端获取商品信息
 const loadGoods = async () => {
+  loadingBar.start()
   let res = await axios.post(`/goods/all`, {
     page: page.value,
     pageSize: 4,
@@ -70,6 +71,7 @@ const loadGoods = async () => {
       }
       goodsList.value.push(goodsInfo)
     })
+    loadingBar.finish()
   }
 }
 

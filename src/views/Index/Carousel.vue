@@ -1,5 +1,5 @@
 <template>
-  <n-carousel key="card" effect="card" :centered-slides="true" slides-per-view="auto" draggable style="height: 240px">
+  <n-carousel autoplay :interval="2000" key="card" effect="card" :centered-slides="true" slides-per-view="auto" draggable style="height: 240px">
     <n-carousel-item :style="{ width: '60%' }" v-for="(item, index) in url" :key="index">
       <img class="carousel-img" :src="item" />
     </n-carousel-item>
@@ -7,6 +7,8 @@
 </template>
 
 <script setup>
+// 轮播图url，目前暂无广告，随便放了几张图
+// 欢迎甲方投放广告
 const url = [
   'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg',
   'https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg',

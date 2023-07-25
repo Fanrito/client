@@ -88,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref, computed,reactive } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { FlashOutline } from '@vicons/ionicons5'
 import { CashOutline } from '@vicons/ionicons5'
 import { inject, onMounted } from 'vue'
@@ -96,7 +96,7 @@ const axios = inject('axios')
 FlashOutline
 CashOutline
 import swal from 'sweetalert' // 导入 SweetAlert 库 负责删除/重置警告
-import { SignalWifiStatusbarConnectedNoInternet4Outlined } from '@vicons/material';
+import { SignalWifiStatusbarConnectedNoInternet4Outlined } from '@vicons/material'
 // 六个搜索框的内容
 let usernameSearch = ref(null)
 let userGender = ref(null)
@@ -109,14 +109,14 @@ let userCampus = ref(null)
 // var newPage=reactive(0)
 const pageSize = ref(15) // 每页显示的用户数量
 function handlePageChange(newPage) {
-  console.log("进入更改页面函数")
+  console.log('进入更改页面函数')
   console.log(newPage)
-  currentPage= newPage
+  currentPage = newPage
   console.log(currentPage)
   search()
 }
-let totalItem=ref(0)
-let totalPages=ref(0)
+let totalItem = ref(0)
+let totalPages = ref(0)
 const options = [
   {
     label: '男',
@@ -127,18 +127,18 @@ const options = [
     value: 0
   },
   {
-    label:'不限',
-    value:null
+    label: '不限',
+    value: null
   }
 ]
 const options_campus = [
   {
     label: '翔安',
-    value: '翔安',
+    value: '翔安'
   },
   {
     label: '思明',
-    value: '思明',
+    value: '思明'
   },
   {
     label: '漳州',
@@ -146,11 +146,13 @@ const options_campus = [
   },
   { label: '马来西亚', value: '马来西亚' },
   {
-    label:'不限',value:null
+    label: '不限',
+    value: null
   }
 ]
 const search = async () => {
   try {
+    loadingBar.start()
     console.log('页面用户电话')
     console.log(phoneSearch.value)
     console.log('当前页面')
@@ -165,7 +167,7 @@ const search = async () => {
         userPhoneNum: phoneSearch.value,
         userEmail: emailSearch.value,
         userGender: userGender.value,
-        userCampus:campusSearch.value,
+        userCampus: campusSearch.value,
         //userStatus:1,
         userNickname: nicknameSearch.value
       }
@@ -176,9 +178,10 @@ const search = async () => {
     console.log('response.data.data.rows')
     console.log(data.data.rows)
     users.value = data.data.rows
-    users.value = users.value.filter(user => user.userStatus !== 0);
-    totalItem.value=data.data.total
-    totalPages.value=Math.ceil(totalItem.value/pageSize.value)
+    users.value = users.value.filter(user => user.userStatus !== 0)
+    totalItem.value = data.data.total
+    totalPages.value = Math.ceil(totalItem.value / pageSize.value)
+    loadingBar.finish()
   } catch (error) {
     console.error(error)
     // 处理错误
@@ -189,8 +192,8 @@ const users = ref([{ id: 1, name: 2 }, { id: 2 }]) //定义一个接收结果的
 //挂载后调用
 console.log('users.value')
 console.log(users.value[0].id)
-onMounted(()=>{
-  currentPage = 1; // 设置初始值为 1
+onMounted(() => {
+  currentPage = 1 // 设置初始值为 1
   search()
 })
 const SearchUser = () => {
@@ -202,23 +205,25 @@ function editUser(userId) {
   editingRow.value = userId // 将正在编辑的行设置为当前行
 }
 const saveChanges = async () => {
+  loadingBar.start()
   console.log(editingRow.value)
-  const selectedItem = users.value.filter(item => (item.userId===editingRow.value))
-  const selectedItems=selectedItem[0]
-  const response=await axios.patch('/admin/update',{
-      userId:editingRow.value,
-      userEmail:selectedItems.userEmail,
-      userNickname:selectedItems.userNickname,
-      userCampus:selectedItems.userCampus,
-      userGender:selectedItems.userGender,
-      userPasswd:selectedItems.userPasswd,
-      userPhoneNum:selectedItems.userPhoneNum
-  }) 
+  const selectedItem = users.value.filter(item => item.userId === editingRow.value)
+  const selectedItems = selectedItem[0]
+  const response = await axios.patch('/admin/update', {
+    userId: editingRow.value,
+    userEmail: selectedItems.userEmail,
+    userNickname: selectedItems.userNickname,
+    userCampus: selectedItems.userCampus,
+    userGender: selectedItems.userGender,
+    userPasswd: selectedItems.userPasswd,
+    userPhoneNum: selectedItems.userPhoneNum
+  })
   console.log(response.data)
   editingRow.value = null // 保存之后将编辑状态取消
+  loadingBar.finish()
 }
 //删除用户
-const deleteUser = (userId) => {
+const deleteUser = userId => {
   // 处理删除逻辑
   swal({
     title: '确认删除用户？',
@@ -234,23 +239,22 @@ const deleteUser = (userId) => {
 }
 //删除用户
 //删除后要不要重新调用一个查询
-const delete_user = async(userId) => {
+const delete_user = async userId => {
   try {
-      await axios.delete(`admin/user/${userId}`).then(
-      response=>{
-          console.log(response.data)
-        }
-      )
-    }
-      catch(error)
-      {
-        console.log(error)
-      }
-      search()
+    loadingBar.start()
+    await axios.delete(`admin/user/${userId}`).then(response => {
+      console.log(response.data)
+    })
+    loadingBar.finish()
+  } catch (error) {
+    loadingBar.error()
+    console.log(error)
+  }
+  search()
 }
 //重置用户
 //重置后要不要重新调用查询
-const resetUser = async(userId) => {
+const resetUser = async userId => {
   // 处理编辑逻辑
   console.log(`Reset user with ID: ${userId}`)
   swal({
@@ -266,14 +270,17 @@ const resetUser = async(userId) => {
 }
 const reset = async userId => {
   try {
+    loadingBar.start()
     const response = await axios.patch('admin/update', {
       params: {
         userId: userId,
         userPasswd: '123456'
       }
     })
+    loadingBar.finish()
     console.log(response.data)
   } catch (e) {
+    loadingBar.error()
     console.log(e)
   }
 }

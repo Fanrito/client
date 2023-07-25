@@ -38,6 +38,7 @@ onMounted(() => {
 
 // 待修改
 const loadSoldGoods = async () => {
+  loadingBar.start()
   let res = await axios.get(`user/order`)
   console.log(res)
   if (res.data.code == 1) {
@@ -53,6 +54,7 @@ const loadSoldGoods = async () => {
       }
     })
     console.log(SoldGoodsList)
+    loadingBar.finish()
   }
 }
 </script>

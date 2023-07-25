@@ -65,9 +65,11 @@ onMounted(() => {
 })
 
 const loadUser = async () => {
+  loadingBar.start()
   let res = await axios.get(`/other/${userId}`)
   console.log(res)
   Object.assign(user, res.data.data)
+  loadingBar.finish()
 }
 </script>
 

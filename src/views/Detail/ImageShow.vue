@@ -37,12 +37,7 @@ export default defineComponent({
   props: {
     imageUrls: {
       type: Array,
-      default: [
-        'https://img12.360buyimg.com/n1/jfs/t1/143936/32/30842/64747/6454ce5cF6b1adc51/065b11723a5094fb.jpg',
-        'https://th.bing.com/th/id/R.f7ed7e216a92f91882f100a2581b9ac6?rik=7y4ciD%2bJL3VuVg&pid=ImgRaw&r=0',
-        'https://th.bing.com/th/id/OIP.caoz0WhiAKT7-PfdN0S4dAHaE8?pid=ImgDet&w=800&h=535&rs=1',
-        'https://th.bing.com/th/id/OIP.QwUNM329lhtfEI60_kjnbgHaDF?pid=ImgDet&w=750&h=312&rs=1'
-      ],
+      default: [],
       required: true
     }
   }

@@ -93,8 +93,8 @@ const generalOptions = ['数码', '文具', '图书', '服装', '医疗', '食�
   value: v
 }))
 
-let finalList = []   // 最终的图片文件对象数组
-let imgStrList = []   // 最终的图片url数组
+let finalList = [] // 最终的图片文件对象数组
+let imgStrList = [] // 最终的图片url数组
 const changeFilelist = filelist => {
   finalList = filelist
 }
@@ -113,11 +113,12 @@ onMounted(() => {
   loadGoodsInfo()
 })
 
-const remove = (file) => {
+const remove = file => {
   fileList.value.filter(item => item.id != file.file.id)
 }
 
 const loadGoodsInfo = async () => {
+  loadingBar.start()
   const response = await axios.get(`/goods`, {
     params: {
       goodsId: goodsId
@@ -139,23 +140,34 @@ const loadGoodsInfo = async () => {
     } // 加载图片
     response.data.data.releaseTime = response.data.data.releaseTime.toString().split('T').join(' ')
     Object.assign(goodsInfo, response.data.data)
+    finalList = fileList.value
+    loadingBar.finish()
   }
 }
 
 const uploadPhotos = async () => {
+  loadingBar.start()
   var data = new FormData()
+  // 先循环一边看看有没有新上传的图片，没有接直接return
   finalList.forEach(item => {
-    if(item.url != null) {
+    if (item.url != null) {
       // 如果图片本身已经上传过了，直接把url加入imgStrList
       imgStrList.push(item.url)
     }
-    data.append('photos', item.file)
   })
-  if(imgStrList.length === finalList.length) {
+  if (imgStrList.length == finalList.length) {
     // 如果没有需要额外上传的图片，就直接上传imgStrList
+    console.log(imgStrList);
     upload()
     return
   }
+  finalList.forEach(item => {
+    if (item.url == null) {
+      // 将新上传的图片加入
+      data.append('photos', item.file)
+    }
+  })
+
   var config = {
     method: 'post',
     url: '/upload/Imgs',
@@ -169,6 +181,7 @@ const uploadPhotos = async () => {
     upload()
   } else {
     message.error('图片上传失败')
+    loadingBar.error()
     if (res.data.msg == 'NOT_LOGIN') {
       message.info('请先登录')
       router.push('/login')
@@ -177,7 +190,7 @@ const uploadPhotos = async () => {
 }
 
 const upload = async () => {
-  console.log(imgStrList);
+  console.log(imgStrList)
   goodsInfo.goodsPhotos = JSON.stringify(imgStrList)
   goodsInfo.releaseTime = goodsInfo.releaseTime.split(' ').join('T')
   const data = JSON.stringify(goodsInfo)
@@ -193,6 +206,7 @@ const upload = async () => {
   console.log(result)
   if (result.data.code == 1) {
     message.success('修改成功')
+    loadingBar.finish()
     router.push('/user')
   } else {
     message.error('修改失败')

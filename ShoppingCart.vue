@@ -35,8 +35,7 @@
       <div class="content" :href="linkHref" target="_blank">
         <n-checkbox v-model:checked="item.isSelected" class="number" @click="selectGoods(item.goodsId)"> 选中 </n-checkbox>
         <div style="height: 110px; width: 110px">
-          <a :href="item.linkHref">
-          <img :src="item.goodsPhoto"  alt="" /></a>
+          <a :href="item.linkHref"> <img :src="item.goodsPhoto" alt="" /></a>
         </div>
 
         <div class="title-content">
@@ -46,9 +45,7 @@
           {{ item.goodsProfile }}
         </div>
         <div style="margin-left: 28px; font-size: 18px; color: red">￥{{ item.curPrice }}</div>
-        <n-input-number min="0" :max="item.inventory" v-model:value="item.collectNum" clearable size="small" 
-        style="margin-left: 80px; vertical-align: middle; width: 100px" 
-        @update:value="changeNum(item.goodsId)"/>
+        <n-input-number min="0" :max="item.inventory" v-model:value="item.collectNum" clearable size="small" style="margin-left: 80px; vertical-align: middle; width: 100px" @update:value="changeNum(item.goodsId)" />
 
         <div style="flex: 1; width: 70px; text-align: center; margin-left: 33px">
           {{ item.total }}
@@ -79,12 +76,12 @@ const selectedAmount = ref(0) //已选商品金额
 const pagesize = ref(10) //页面大小
 var cur_page = ref(1) //当前页面
 const userId = ref(1)
-var goods=ref([])
+var goods = ref([])
 //这四个函数是要连接后端的，为方便修改写前面了
 
 // var goods=ref([])
 // 获得购物车信息
-onMounted(()=>{
+onMounted(() => {
   search()
 })
 
@@ -94,67 +91,24 @@ const search = async () => {
       params: {
         // 参数...
       }
-    });
-    const data = response.data.data.rows;
+    })
+    const data = response.data.data.rows
     const modifiedData = data.map(item => {
       // 在这里对每个对象进行修改，并添加属性
       return {
         ...item,
         isSelected: false, // 替换为你想要添加的属性和值
-        total:item.collectNum*item.curPrice
-      };
-    });
-    goods.value = modifiedData;
-    console.log(goods.value);
+        total: item.collectNum * item.curPrice
+      }
+    })
+    goods.value = modifiedData
+    console.log(goods.value)
+    loadingBar.finish()
   } catch (error) {
-    console.log(error);
+    console.log(error)
+    loadingBar.error()
   }
-};
-
-// var goods = ref([
-//   {
-//     goodsId:1,
-//     goodsPhoto: '../src/static/img/phone.jpg',
-//     curPrice: '1000',
-//     sellerId: 1,
-//     inventory:5,
-//     goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-//     goodsProfile:
-//       '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-//     goodsNum: 1,
-//     linkHref: 'http://127.0.0.1:5173/',
-//     total:1000,
-//     isSelected: false     //这个后端没有传给我怎么办
-//   },
-//   {
-//     goodsId:2,
-//     goodsPhoto: '../src/static/img/phone.jpg',
-//     curPrice: '1000',
-//     sellerId: '我是一只羊',
-//     inventory:5,
-//     goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-//     goodsProfile:
-//       '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-//     goodsNum: 1,
-//     linkHref: 'http://127.0.0.1:5173/',
-//     total:1000,//总价格 后端也没有传给我
-//     isSelected: false
-//   },
-//   {
-//     goodsId:3,
-//     goodsPhoto: '../src/static/img/phone.jpg',
-//     curPrice: '1000',
-//     sellerId: '我是一只牛', //暂时不用放卖家名
-//     inventory:5,
-//     goodsName: '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-//     goodsProfile:
-//       '华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G华为 HUAWEI P30/P30 pro  麒麟980 二手手机 95新成色 天空之境(P30 Pro) 8G+128G',
-//     goodsNum: 1,
-//     linkHref: 'http://127.0.0.1:5173/',
-//     total:1000,
-//     isSelected: false
-//   }
-// ])
+}
 
 //点击全选时进入这个函数，对应的总价格和已选商品数量改变
 function ALLselect() {
@@ -162,141 +116,141 @@ function ALLselect() {
   if (allItemsSelected.value === true) {
     console.log(allItemsSelected.value)
     for (let i = 0; i < goods.value.length; i++) {
-      if(goods.value[i].isSelected===false)
-      {
+      if (goods.value[i].isSelected === false) {
         goods.value[i].isSelected = true
         selectGoods(goods.value[i].goodsId)
         console.log(goods.value[i].isSelected)
       }
-
     }
   } else if (allItemsSelected.value === false) {
     console.log(allItemsSelected.value)
     for (let i = 0; i < goods.value.length; i++) {
-      if(goods.value[i].isSelected===true)
-      {
-          goods.value[i].isSelected = false
-          selectGoods(goods.value[i].goodsId)
-          console.log(goods.value[i].isSelected)
+      if (goods.value[i].isSelected === true) {
+        goods.value[i].isSelected = false
+        selectGoods(goods.value[i].goodsId)
+        console.log(goods.value[i].isSelected)
       }
-
     }
   }
 }
 
 //当修改商品的收藏数量时进入这个函数，把对应的总价格改了
-function changeNum(goodsId)
-{
+function changeNum(goodsId) {
   // console.log(goodsId)
   // console.log(goods.value)
   console.log(goods.value)
-  const selectedGoods = goods.value.find(goods => goods.goodsId === goodsId);
+  const selectedGoods = goods.value.find(goods => goods.goodsId === goodsId)
   console.log(selectedGoods)
-  if(selectedGoods.isSelected===true)selectedAmount.value-=selectedGoods.total;
-  selectedGoods.total=selectedGoods.curPrice*selectedGoods.collectNum;
-  if(selectedGoods.isSelected===true)selectedAmount.value+=selectedGoods.total;
+  if (selectedGoods.isSelected === true) selectedAmount.value -= selectedGoods.total
+  selectedGoods.total = selectedGoods.curPrice * selectedGoods.collectNum
+  if (selectedGoods.isSelected === true) selectedAmount.value += selectedGoods.total
   console.log(selectedGoods.total)
-}  
+}
 
 //判断当前是否全选
-const judgeALL=()=>
-{
-  console.log("进入judge函数")
-  let judgeTrue=1;//是否全选？
-  let judgeFalse=1;//是否全不选？
+const judgeALL = () => {
+  console.log('进入judge函数')
+  let judgeTrue = 1 //是否全选？
+  let judgeFalse = 1 //是否全不选？
   for (let i = 0; i < goods.value.length; i++) {
-    if(goods.value[i].isSelected===true)
-    {
-      judgeFalse=0;break;
+    if (goods.value[i].isSelected === true) {
+      judgeFalse = 0
+      break
     }
   }
-  for (let i = 0; i < goods.value.length; i++){
-    if(goods.value[i].isSelected===false)
-    {
-      judgeTrue=0;break;
+  for (let i = 0; i < goods.value.length; i++) {
+    if (goods.value[i].isSelected === false) {
+      judgeTrue = 0
+      break
     }
   }
-  if(judgeTrue===1)
-  {
-    allItemsSelected.value=true;
+  if (judgeTrue === 1) {
+    allItemsSelected.value = true
   }
-  if(judgeFalse===1)
-  {
-    allItemsSelected.value=false;
+  if (judgeFalse === 1) {
+    allItemsSelected.value = false
   }
   console.log('是否全选:')
   console.log(allItemsSelected.value)
 }
 
 //当选择一个商品时进入这个函数，自动计算总价格和已选商品数量
-const selectGoods = (goodsId) => {
-  const selectedGoods = goods.value.find(goods => goods.goodsId === goodsId);
+const selectGoods = goodsId => {
+  const selectedGoods = goods.value.find(goods => goods.goodsId === goodsId)
   console.log(selectedGoods.isSelected)
   if (selectedGoods) {
-    if(selectedGoods.isSelected===true)
-    {
+    if (selectedGoods.isSelected === true) {
       judgeALL()
-      selectedAmount.value =selectedAmount.value+ selectedGoods.total;
-      cartItemCount.value=cartItemCount.value+1;
-    }
-    else if(selectedGoods.isSelected===false)
-    {
+      selectedAmount.value = selectedAmount.value + selectedGoods.total
+      cartItemCount.value = cartItemCount.value + 1
+    } else if (selectedGoods.isSelected === false) {
       judgeALL()
-      selectedAmount.value=selectedAmount.value-selectedGoods.total;
-      cartItemCount.value=cartItemCount.value-1;
+      selectedAmount.value = selectedAmount.value - selectedGoods.total
+      cartItemCount.value = cartItemCount.value - 1
     }
     console.log(cartItemCount.value)
     console.log(selectedAmount.value)
   }
 }
 
-const DeleteCollect = async (shoppingCartId) => {
+const DeleteCollect = async shoppingCartId => {
   try {
+    loadingBar.start()
     const response = await axios.delete(`/shoppingcart/delete?shoppingCartIds=${shoppingCartId}`)
     // 处理成功响应
-    console.log(response.data);
+    console.log(response.data)
     // 进行后续操作，如展示成功提示等
     search()
   } catch (error) {
     // 处理错误情况
-    console.log(error);
+    console.log(error)
+    loadingBar.error()
     // 进行错误处理，如展示错误提示等
   }
-};
+}
 
-const deleteAllGoods=async()=>{
+const deleteAllGoods = async () => {
   try {
-    const selectedItems = goods.value.filter(item => item.isSelected).map(item => item.shoppingCartId).join(",");
+    loadingBar.start()
+    const selectedItems = goods.value
+      .filter(item => item.isSelected)
+      .map(item => item.shoppingCartId)
+      .join(',')
     const response = await axios.delete(`/shoppingcart/delete?shoppingCartIds=${selectedItems}`)
     // 处理成功响应
-    console.log(response.data);
+    console.log(response.data)
     // 进行后续操作，如展示成功提示等
     search()
   } catch (error) {
     // 处理错误情况
-    console.log(error);
+    console.log(error)
+    loadingBar.error()
     // 进行错误处理，如展示错误提示等
   }
 }
 
 const buyAllGoods = async () => {
   // 获取所有选中的商品的标识符
-  const selectedItems = goods.value.filter(item => item.isSelected).map(item => item.shoppingCartId).join(",");
+  loadingBar.start()
+  const selectedItems = goods.value
+    .filter(item => item.isSelected)
+    .map(item => item.shoppingCartId)
+    .join(',')
   console.log(selectedItems)
-try {
-  // 发送POST请求到后端购买接口
-  const response = await axios.post(`/shoppingcart/buy?shoppingCartIds=${selectedItems}`);
-  // 处理成功响应
-  console.log(response.data);
-  // 进行后续操作，如展示成功提示等
-} catch (error) {
-  // 处理错误情况
-  console.log(error);
-  // 进行错误处理，如展示错误提示等
+  try {
+    // 发送POST请求到后端购买接口
+    const response = await axios.post(`/shoppingcart/buy?shoppingCartIds=${selectedItems}`)
+    // 处理成功响应
+    console.log(response.data)
+    // 进行后续操作，如展示成功提示等
+    loadingBar.finish()
+  } catch (error) {
+    // 处理错误情况
+    console.log(error)
+    loadingBar.error()
+    // 进行错误处理，如展示错误提示等
+  }
 }
-};
-
-
 </script>
 
 <style scoped lang="scss">

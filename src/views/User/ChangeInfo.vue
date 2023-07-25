@@ -155,13 +155,15 @@ const selectGender = ref([
 ])
 
 onMounted(() => {
-   loadUser()
+  loadUser()
 })
 
 const loadUser = async () => {
+  loadingBar.start()
   let res = await axios.get('/user')
   console.log(res)
   Object.assign(user, res.data.data)
+  loadingBar.finish()
 }
 
 const input = () => {
@@ -185,6 +187,7 @@ const input = () => {
     userProfile: user.userProfile,
     userId: user.userId
   }
+  loadingBar.start()
 
   axios
     .patch('/user/update', param)
@@ -203,6 +206,7 @@ const input = () => {
       console.error('Error updating user information:', error)
       message.error('网络异常')
     })
+  loadingBar.finish()
 }
 </script>
 

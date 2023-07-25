@@ -2,12 +2,12 @@
   选择商品数量
   <n-space horizon align="center">
     <!-- 添加商品数量 -->
-    <n-input-number min="1" :max="max + 1" v-model:value="select_count" clearable />
+    <n-input-number min="0" :max="max" v-model:value="select_count" clearable />
     <!-- 加入购物车按钮 -->
     <n-dialog-provider>
-      <n-button @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
+      <n-button :disabled="max == 0"  @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
       <n-text>&emsp;</n-text>
-      <n-button @click="AddToCarConfirm" type="info" icon-placement="right">加入购物车</n-button>
+      <n-button :disabled="max == 0" @click="AddToCarConfirm" type="info" icon-placement="right">加入购物车</n-button>
     </n-dialog-provider>
   </n-space>
 </template>
@@ -40,12 +40,15 @@ const BuyNow = () => {
     negativeText: '取消',
     onPositiveClick: async () => {
       try {
+        loadingBar.start()
         const response = await axios.post(`goods/purchase?goodsId=${goodsId}&orderNum=${select_count.value}`)
         if (response.data.code === 1) {
           message.success('下单成功！')
+          loadingBar.finish()
           router.push('/user/bought')
         } else {
           message.error('下单失败！')
+          loadingBar.error()
           if (response.data.msg == 'NOT_LOGIN') {
             message.info('请先登录')
             router.push('/login')
@@ -69,11 +72,14 @@ const AddToCarConfirm = () => {
     negativeText: '取消',
     onPositiveClick: async () => {
       try {
+        loadingBar.start()
         const response = await axios.put(`goods/cart?goodsId=${goodsId}&collectNum=${select_count.value}`)
         if (response.data.code === 1) {
           message.success('已将物品加入购物车')
+          loadingBar.finish()
         } else {
           message.error('加购失败！')
+          loadingBar.error()
           if (response.data.msg == 'NOT_LOGIN') {
             message.info('请先登录')
             router.push('/login')

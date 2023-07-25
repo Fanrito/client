@@ -30,9 +30,11 @@ onMounted(() => {
 })
 
 const getComments = async () => {
+  loadingBar.start()
   let res = await axios.get(`user/comment/${userId}`)
   console.log(res)
   commentsList.value = res.data.data
+  loadingBar.finish()
 }
 </script>
 

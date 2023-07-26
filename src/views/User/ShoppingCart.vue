@@ -94,15 +94,19 @@ const search = async () => {
     const data = response.data.data.rows
     console.log(data)
     const modifiedData = data.map(item => {
-      // 在这里对每个对象进行修改，并添加属性
-      const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
-      const goodsPhotosArray = JSON.parse(goodsPhotosString)
-      item.goodsPhotos = goodsPhotosArray[0]
-      return {
-        ...item,
-        isSelected: false, // 替换为你想要添加的属性和值
-        total: item.collectNum * item.curPrice,
-        linkHref: `/detail/${item.goodsId}`
+      try {
+        // 在这里对每个对象进行修改，并添加属性
+        const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+        const goodsPhotosArray = JSON.parse(goodsPhotosString)
+        item.goodsPhotos = goodsPhotosArray[0]
+        return {
+          ...item,
+          isSelected: false, // 替换为你想要添加的属性和值
+          total: item.collectNum * item.curPrice,
+          linkHref: `/detail/${item.goodsId}`
+        }
+      } catch (error) {
+        console.log(error)
       }
     })
     goods.value = modifiedData

@@ -56,6 +56,10 @@ img {
   text-overflow: ellipsis;
   word-break: break-all;
   box-sizing: border-box;
+  span {
+    display: inline-block;
+    height: 45px;
+  }
 }
 
 .price-content {

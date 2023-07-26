@@ -52,7 +52,10 @@
     ><br />
     <!-- 提交 -->
     <div style="display: flex; justify-content: flex-end">
-      <n-button round type="success" @click="releaseGood">确认修改</n-button>
+      <n-space>
+        <n-button round type="error" @click="deleteGood">删除商品</n-button>
+        <n-button round type="success" @click="releaseGood">确认修改</n-button>
+      </n-space>
     </div>
   </n-form>
   <!-- model的商品信息 -->
@@ -159,7 +162,7 @@ const uploadPhotos = async () => {
   })
   if (imgStrList.length == finalList.length) {
     // 如果没有需要额外上传的图片，就直接上传imgStrList
-    console.log(imgStrList);
+    console.log(imgStrList)
     upload()
     return
   }
@@ -226,6 +229,20 @@ const releaseGood = e => {
       message.error('输入不合法，请修改')
     }
   })
+}
+
+// 删除商品 
+const deleteGood = async () => {
+  loadingBar.start()
+  let res = await axios.delete(`user/goods/${goodsId}`)
+  if(res.data.code == 1) {
+    loadingBar.finish()
+    message.success('删除成功')
+    router.push('/user/published')
+  } else {
+    loadingBar.error()
+    message.success('删除失败')
+  }
 }
 </script>
 

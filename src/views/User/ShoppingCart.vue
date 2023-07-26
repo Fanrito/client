@@ -85,6 +85,7 @@ onMounted(() => {
 })
 const search = async () => {
   try {
+    loadingBar.start()
     const response = await axios('/shoppingcart', {
       params: {
         // 参数...
@@ -233,7 +234,7 @@ const buyAllGoods = async () => {
     // 发送POST请求到后端购买接口
     loadingBar.start()
     const response = await axios.post(`/shoppingcart/buy?shoppingCartIds=${selectedItems}`)
-    console.log(response);
+    console.log(response)
     if (response.data.code == 1) {
       // 处理成功响应
       console.log(response.data)

@@ -44,21 +44,25 @@ const loadGoods = async () => {
   console.log(res)
   if (res.data.code == 1) {
     res.data.data.rows.map(item => {
-      const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
-      const goodsPhotosArray = JSON.parse(goodsPhotosString)
-      let goodsInfo = {
-        imgSrc: goodsPhotosArray[0],
-        goodsId: item.goodsId,
-        goodsName: item.goodsName,
-        oriPrice: item.oriPrice == null ? '' : item.oriPrice,
-        curPrice: item.curPrice,
-        goodsCategoryName: item.goodsCategoryName,
-        releaseTime: item.releaseTime,
-        inventory: item.inventory,
-        goodsProfile: item.goodsProfile,
-        linkHref: `/detail/${item.goodsId}`
+      try {
+        const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+        const goodsPhotosArray = JSON.parse(goodsPhotosString)
+        let goodsInfo = {
+          imgSrc: goodsPhotosArray[0],
+          goodsId: item.goodsId,
+          goodsName: item.goodsName,
+          oriPrice: item.oriPrice == null ? '' : item.oriPrice,
+          curPrice: item.curPrice,
+          goodsCategoryName: item.goodsCategoryName,
+          releaseTime: item.releaseTime,
+          inventory: item.inventory,
+          goodsProfile: item.goodsProfile,
+          linkHref: `/detail/${item.goodsId}`
+        }
+        goodsList.value.push(goodsInfo)
+      } catch (error) {
+        console.log(error)
       }
-      goodsList.value.push(goodsInfo)
     })
     loadingBar.finish()
   } else {

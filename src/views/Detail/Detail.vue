@@ -13,7 +13,7 @@
       <n-layout has-sider>
         <!-- 左边图片布局 -->
         <n-layout-sider :native-scrollbar="false" width="300px" bordered>
-          <image-show style="border: 1 solid #fff; border-radius: 20px 0 0 0;" :imageUrls="res.goodsPhotos"></image-show>
+          <image-show style="border: 1 solid #fff; border-radius: 20px 0 0 0" :imageUrls="res.goodsPhotos"></image-show>
           <n-layout-content content-style="padding: 24px;">
             <div align="left">
               <font color="grey">发布时间 {{ res.releaseTime }}</font>
@@ -130,12 +130,16 @@ const getItem = async () => {
   })
   console.log(response)
   if (response.data.code == 1) {
-    const goodsPhotosString = response.data.data.goodsPhotos.replace(/\\/g, '')
-    const goodsPhotosArray = JSON.parse(goodsPhotosString)
-    response.data.data.goodsPhotos = goodsPhotosArray
-    response.data.data.releaseTime = response.data.data.releaseTime.toString().split('T').join(' ')
-    Object.assign(res, response.data.data)
-    console.log(res)
+    try {
+      const goodsPhotosString = response.data.data.goodsPhotos.replace(/\\/g, '')
+      const goodsPhotosArray = JSON.parse(goodsPhotosString)
+      response.data.data.goodsPhotos = goodsPhotosArray
+      response.data.data.releaseTime = response.data.data.releaseTime.toString().split('T').join(' ')
+      Object.assign(res, response.data.data)
+      console.log(res)
+    } catch (error) {
+      console.log()
+    }
     loadingBar.finish()
   } else {
     loadingBar.error()

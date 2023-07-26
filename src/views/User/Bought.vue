@@ -47,12 +47,16 @@ const loadSoldGoods = async () => {
     const id = userStore.id
     res.data.data.map(item => {
       if (item.buyerId == id) {
-        const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
-        const goodsPhotosArray = JSON.parse(goodsPhotosString)
-        item.goodsPhotos = goodsPhotosArray[0]
-        item.orderDateTime = item.orderDateTime.toString().split('T').join(' ')
-        item.linkHref = `/detail/${item.goodsId}`
-        SoldGoodsList.value.push(item)
+        try {
+          const goodsPhotosString = item.goodsPhotos.replace(/\\/g, '')
+          const goodsPhotosArray = JSON.parse(goodsPhotosString)
+          item.goodsPhotos = goodsPhotosArray[0]
+          item.orderDateTime = item.orderDateTime.toString().split('T').join(' ')
+          item.linkHref = `/detail/${item.goodsId}`
+          SoldGoodsList.value.push(item)
+        } catch (error) {
+          console.log('商品图片不存在')
+        }
       }
     })
     console.log(SoldGoodsList)

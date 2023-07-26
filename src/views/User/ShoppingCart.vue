@@ -243,7 +243,7 @@ const buyAllGoods = async () => {
       // 处理成功响应
       console.log(response.data)
       // 进行后续操作，如展示成功提示等
-      loadingBar.finish()
+      search()
       message.success('结算成功')
     } else {
       loadingBar.error()

@@ -74,6 +74,7 @@
           <n-tab-pane name="comments" tab="评价">
             <n-input type="textarea" v-model:value="commentValue" placeholder="请输入评价"></n-input>
             <n-button type="info" @click="comment">发布</n-button>
+            <Comments></Comments>
           </n-tab-pane>
         </n-tabs>
       </n-card>
@@ -103,6 +104,7 @@
 import TopUI from './TopUI.vue'
 import ImageShow from './ImageShow.vue'
 import InfoChoose from './InfoChoose.vue'
+import Comments from './Comments.vue'
 // import { NDialogProvider } from 'naive-ui';
 import { ref, onMounted, inject, reactive, provide } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
@@ -128,15 +130,21 @@ const comment = async () => {
     goodsId: goodsId,
     goodsCommentContent: commentValue.value
   })
-  console.log(res);
+  console.log(res)
   if (res.data.code == 1) {
     loadingBar.finish()
     message.success('评价成功')
     commentValue.value = ''
+    window.location.reload()
   } else {
     loadingBar.error()
     message.error(res.data.msg)
   }
+}
+
+// 评论列表更新后的反馈
+const handleCommentsUpdated = () => {
+  message.success('评价已刷新')
 }
 
 const getSeller = async () => {

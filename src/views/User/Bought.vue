@@ -15,7 +15,10 @@
       :linkHref="item.linkHref"
       :total-price="item.orderSumPrice"
     >
-      <n-button :disabled="item.orderStatus == '已收货'" strong secondary type="primary" @click="confirmReceipt(item)">确认收货</n-button>
+      <n-space class="btns">
+        <n-button :disabled="item.orderStatus == '已收货'" strong secondary type="primary" @click="confirmReceipt(item)">确认收货</n-button>
+        <n-button strong secondary type="info" @click="comment(item)">立即评价</n-button>
+      </n-space>
     </OrderCard>
   </div>
 </template>
@@ -39,6 +42,10 @@ let SoldGoodsList = ref([])
 onMounted(() => {
   loadSoldGoods()
 })
+// 立即评论
+const comment = async item => {
+  router.push(`/detail/${item.goodsId}`)
+}
 
 // 确认收货
 const confirmReceipt = async item => {
@@ -97,7 +104,7 @@ const loadSoldGoods = async () => {
     margin: 1px 0px;
     background: #faf9f9;
 
-    .n-button {
+    .btns {
       position: absolute;
       right: 40px;
       bottom: 20px;

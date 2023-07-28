@@ -66,7 +66,17 @@
     </div>
     <!-- 下面的信息 -->
     <n-layout>
-      <img class="w" v-for="(item, index) in res.goodsPhotos" :src="item" alt="" :key="index" style="display: block; width: 700px; margin: 0 auto" />
+      <n-card>
+        <n-tabs type="line" animated size="large" justify-content="space-evenly">
+          <n-tab-pane name="image" tab="图片">
+            <img class="w" v-for="(item, index) in res.goodsPhotos" :src="item" alt="" :key="index" style="display: block; width: 700px; margin: 0 auto" />
+          </n-tab-pane>
+          <n-tab-pane name="comments" tab="评价">
+            <n-input type="textarea" v-model:value="commentValue" placeholder="请输入评价"></n-input>
+            <n-button type="info" @click="comment">发布</n-button>
+          </n-tab-pane>
+        </n-tabs>
+      </n-card>
     </n-layout>
   </div>
 </template>
@@ -101,6 +111,7 @@ const route = useRoute()
 const axios = inject('axios')
 import { useLoadingBar } from 'naive-ui'
 const loadingBar = useLoadingBar()
+const message = inject('message')
 
 // 获取当前商品id
 const goodsId = route.params.goodsId
@@ -109,6 +120,24 @@ provide('goodsId', goodsId)
 let res = reactive({})
 let seller = reactive({})
 let userLink = ref('')
+let commentValue = ref('')
+// 发布评价
+const comment = async () => {
+  loadingBar.start()
+  let res = await axios.put('goods/comment', {
+    goodsId: goodsId,
+    goodsCommentContent: commentValue.value
+  })
+  console.log(res);
+  if (res.data.code == 1) {
+    loadingBar.finish()
+    message.success('评价成功')
+    commentValue.value = ''
+  } else {
+    loadingBar.error()
+    message.error(res.data.msg)
+  }
+}
 
 const getSeller = async () => {
   console.log(res.sellerId)

@@ -14,7 +14,7 @@
       <div>订单状态：{{ status }}</div>
       <div>订单时间：{{ orderTime }}</div>
     </div>
-    <slot class="slot"></slot>
+    <slot></slot>
   </a>
 </template>
 
@@ -24,7 +24,7 @@ const props = defineProps(['status', 'buyer', 'seller', 'imgSrc', 'title', 'tota
 function handleLinkClick(event) {
   // 如果事件来自于 button 元素，则阻止跳转
   console.log(event.target.tagName.toLowerCase())
-  if (event.target.tagName.toLowerCase() === 'span') {
+  if (event.target.tagName.toLowerCase() === 'span' || event.target.tagName.toLowerCase() === 'button') {
     event.preventDefault()
   }
 }

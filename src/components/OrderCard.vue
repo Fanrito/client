@@ -1,5 +1,5 @@
 <template>
-  <a class="content" :href="linkHref" target="_blank">
+  <a class="content" :href="linkHref" target="_blank" @click="handleLinkClick">
     <div class="img-content">
       <img :src="imgSrc" alt="" style="width: 100%; height: 100%" />
     </div>
@@ -14,12 +14,20 @@
       <div>订单状态：{{ status }}</div>
       <div>订单时间：{{ orderTime }}</div>
     </div>
+    <slot class="slot"></slot>
   </a>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
 const props = defineProps(['status', 'buyer', 'seller', 'imgSrc', 'title', 'totalPrice', 'num', 'orderTime', 'linkHref'])
+function handleLinkClick(event) {
+  // 如果事件来自于 button 元素，则阻止跳转
+  console.log(event.target.tagName.toLowerCase())
+  if (event.target.tagName.toLowerCase() === 'span') {
+    event.preventDefault()
+  }
+}
 </script>
 
 <style scoped lang="scss">

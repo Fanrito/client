@@ -5,9 +5,9 @@
     <n-input-number min="0" :max="max" v-model:value="select_count" clearable />
     <!-- 加入购物车按钮 -->
     <n-dialog-provider>
-      <n-button :disabled="max == 0" @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
+      <n-button :disabled="max == 0 || select_count == 0" @click="BuyNow" type="error" icon-placement="right">立即购买</n-button>
       <n-text>&emsp;</n-text>
-      <n-button :disabled="max == 0" @click="AddToCarConfirm" type="info" icon-placement="right">加入购物车</n-button>
+      <n-button :disabled="max == 0 || select_count == 0" @click="AddToCarConfirm" type="info" icon-placement="right">加入购物车</n-button>
     </n-dialog-provider>
   </n-space>
 </template>

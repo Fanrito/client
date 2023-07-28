@@ -14,7 +14,9 @@
       :img-src="item.goodsPhotos"
       :linkHref="item.linkHref"
       :total-price="item.orderSumPrice"
-    ></OrderCard>
+    >
+      <n-button :disabled="item.orderStatus == '已收货'" strong secondary type="primary" @click="confirmReceipt(item)">确认收货</n-button>
+    </OrderCard>
   </div>
 </template>
 
@@ -38,7 +40,24 @@ onMounted(() => {
   loadSoldGoods()
 })
 
-// 待修改
+// 确认收货
+const confirmReceipt = async item => {
+  loadingBar.start()
+  let res = await axios.patch('user/order/update', {
+    orderId: item.orderId,
+    orderStatus: '已收货'
+  })
+  console.log(res)
+  if (res.data.code == 1) {
+    loadingBar.finish()
+    message.success('收货成功')
+    window.location.reload()
+  } else {
+    loadingBar.error()
+    message.error(res.data.msg)
+  }
+}
+
 const loadSoldGoods = async () => {
   loadingBar.start()
   let res = await axios.get(`user/order`)
@@ -74,8 +93,15 @@ const loadSoldGoods = async () => {
   transition: background box-shadow 0.3s ease;
 
   .item {
+    position: relative;
     margin: 1px 0px;
     background: #faf9f9;
+
+    .n-button {
+      position: absolute;
+      right: 40px;
+      bottom: 20px;
+    }
   }
 
   .item:hover {

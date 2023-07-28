@@ -55,7 +55,7 @@ const loadPublishedGoods = async () => {
         releaseTime: item.releaseTime.toString().split('T').join(' '),
         inventory: item.inventory,
         goodsProfile: item.goodsProfile,
-        linkHref: `/edit/${item.goodsId}`
+        linkHref: `/detail/${item.goodsId}`
       }
       publishedGoodsList.value.push(goodsInfo)
     })

@@ -117,10 +117,17 @@ export default defineComponent({
           userPasswd: passwd.value,
           userCampus: campus.value,
           userNickname: nick_name.value
-        })
+        }) 
         console.log(response)
-        // loadingBar.finish()
+        if(response.data.code===0)
+        {
+          message.error(response.data.msg)
+        }
+       else{
         router.push('/admin/user')
+       }
+        //loadingBar.finish()
+        
       } else if (passwd.value == '') {
         passwordsMatch.value = 3
       } else {

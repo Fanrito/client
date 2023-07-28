@@ -39,13 +39,13 @@
         </div>
 
         <div class="title-content">
-          {{ item.collectNum }}
+          {{ item.goodsName }}
           <br />
           <br />
           {{ item.goodsProfile }}
         </div>
         <div style="margin-left: 28px; font-size: 18px; color: red">￥{{ item.curPrice }}</div>
-        <n-input-number min="0" :max="item.inventory" v-model:value="item.collectNum" clearable size="small" style="margin-left: 80px; vertical-align: middle; width: 100px" @update:value="changeNum(item.goodsId)" />
+        <n-input-number min="0" :max="item.inventory" v-model:value="item.collectNum" clearable size="small" style="margin-left: 80px; vertical-align: middle; width: 100px" @update:value="changeNum(item.shoppingCartId,item.collectNum)" />
 
         <div style="flex: 1; width: 70px; text-align: center; margin-left: 33px">
           {{ item.total }}
@@ -91,6 +91,7 @@ const search = async () => {
         // 参数...
       }
     })
+    console.log("查询购物车...")
     const data = response.data.data.rows
     console.log(data)
     const modifiedData = data.map(item => {
@@ -140,11 +141,15 @@ function ALLselect() {
   }
 }
 //当修改商品的收藏数量时进入这个函数，把对应的总价格改了
-function changeNum(goodsId) {
+const changeNum=async(shoppingCartId,collectNum)=>{
   // console.log(goodsId)
   // console.log(goods.value)
+  const response=axios.patch('shoppingcart/update',{
+    "shoppingCartId":shoppingCartId,
+    "collectNum":collectNum
+  })
   console.log(goods.value)
-  const selectedGoods = goods.value.find(goods => goods.goodsId === goodsId)
+  const selectedGoods = goods.value.find(goods => goods.shoppingCartId === shoppingCartId)
   console.log(selectedGoods)
   if (selectedGoods.isSelected === true) selectedAmount.value -= selectedGoods.total
   selectedGoods.total = selectedGoods.curPrice * selectedGoods.collectNum
@@ -184,11 +189,21 @@ const selectGoods = goodsId => {
   if (selectedGoods) {
     if (selectedGoods.isSelected === true) {
       judgeALL()
-      selectedAmount.value = selectedAmount.value + selectedGoods.total
+      selectedAmount.value = parseFloat(selectedAmount.value) + parseFloat(selectedGoods.total)
+      const tmp=parseFloat(selectedAmount.value).toFixed(2)
+      console.log("tmp")
+      console.log(tmp)
+      if(Math.abs(selectedAmount.value-tmp)<1e-3)selectedAmount.value=tmp
       cartItemCount.value = cartItemCount.value + 1
     } else if (selectedGoods.isSelected === false) {
-      judgeALL()
+      //judgeALL()
+      if(allItemsSelected.value===true)allItemsSelected.value=false
       selectedAmount.value = selectedAmount.value - selectedGoods.total
+      if(selectedAmount.value<1e-3)selectedAmount.value=0
+      const tmp=parseFloat(selectedAmount.value).toFixed(2)
+      console.log("tmp")
+      console.log(tmp)
+      if(Math.abs(selectedAmount.value-tmp)<1e-3)selectedAmount.value=tmp
       cartItemCount.value = cartItemCount.value - 1
     }
     console.log(cartItemCount.value)
@@ -201,6 +216,10 @@ const DeleteCollect = async shoppingCartId => {
     const response = await axios.delete(`/shoppingcart/delete?shoppingCartIds=${shoppingCartId}`)
     // 处理成功响应
     console.log(response.data)
+    if(location.reload())
+    {
+      console.log("已刷新")
+    }
     // 进行后续操作，如展示成功提示等
     search()
   } catch (error) {
@@ -219,8 +238,13 @@ const deleteAllGoods = async () => {
     const response = await axios.delete(`/shoppingcart/delete?shoppingCartIds=${selectedItems}`)
     // 处理成功响应
     console.log(response.data)
-    // 进行后续操作，如展示成功提示等
+    // 进行后续操作，如展示成功提示等    
+    cartItemCount.value=0;
+    selectedAmount.value=0;
+
     search()
+    //刷新
+
   } catch (error) {
     // 处理错误情况
     console.log(error)

@@ -10,7 +10,7 @@ import store from './stores/UserStore.js'
 import App from './App.vue'
 import router from './router'
 
-axios.defaults.baseURL = 'https://7738984zk7.goho.co'
+axios.defaults.baseURL = 'http://118.178.197.206:8080'
 const { message, notification, dialog } = createDiscreteApi(['message', 'dialog', 'notification'])
 const app = createApp(App)
 
